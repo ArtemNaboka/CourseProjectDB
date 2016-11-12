@@ -1,0 +1,107 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Style>
+
+@{
+    ViewData["Title"] = "Стили";
+}
+
+<link rel="stylesheet" href="~/css/styles.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/styles.js"></script>
+
+<div class="column features">
+    <div>
+        <form method="get" class="form-horizontal">
+            <input class="form-control" name="searchString" type="text" placeholder="Название стиля, страна" value="@ViewBag.SearchString" />
+            <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
+        </form>
+    </div>
+    <div>
+        <h4>
+            Сортировать
+        </h4>
+        <form method="get">
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="1">По эпохе возникновения</label>
+            </div>
+
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="2">По стране</label>
+            </div>
+            <input style="width:100%; margin-top:5px;" type="submit" value="Сортировать" class="btn btn-primary" />
+        </form>
+    </div>
+    <div>
+        <h4>Фильтр</h4>
+        <form method="get">
+            <div class="checkbox">
+                <label><input type="checkbox" flag="1" name="boxFilter" value="Античность">Античность</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" flag="2" name="boxFilter" value="Средневековье">Средневековье</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" flag="3" name="boxFilter" value="Ренесанс">Ренесанс</label>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" flag="4" name="boxFilter" value="Новое время">Новое время</label>
+            </div>
+            <input style="width:100%; margin-top:5px;" type="submit" value="Фильтровать" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+<div class="column">
+    <a asp-action="CreateNewStyle" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить новый стиль</a>
+    <div class="styleContainer">
+        @if (Model != null && Model.Count != 0)
+        {
+            <table id="styleTable">
+                <tr style="background-color:aqua;">
+                    <td><b>Название стиля</b></td>
+                    <td><b>Эпоха возникновения</b></td>
+                    <td><b>Страна</b></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                @foreach (var style in Model)
+                {
+                    <tr id="@style.Id">
+                        <td>@style.StyleName</td>
+                        <td>@style.Era</td>
+                        <td>@style.Country</td>
+                        <td><a class="btn btn-info" title="Редактировать" asp-action="EditStyle" asp-route-styleId="@style.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a class="btn btn-danger del" styleId="@style.Id" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h3>В базе данных отсутствует информация о стилях скульптуры...</h3>
+        }
+    </div>
+</div>
+
+
+@if(ViewBag.Checked != 0)
+{
+    <script>
+        var checkedNum = @ViewBag.Checked;
+        $("input[value=" + checkedNum + "]").attr("checked", true);
+    </script>
+}
+
+@if (ViewBag.Filters != null)
+{
+    foreach (var filter in ((List<int>)ViewBag.Filters))
+    {
+        <script>
+            var scriptFilter = @filter;
+            $("input[flag=" + scriptFilter + "]").attr("checked", true);
+        </script>
+    }
+}

@@ -1,0 +1,43 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model Style
+
+@{
+    ViewData["Title"] = "Добавить стиль";
+}
+
+<form asp-controller="Home" asp-action="CreateNewStyle" method="post" class="form-horizontal">
+    <h4>Добавление нового стиля</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="StyleName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="StyleName" class="form-control" />
+            <span asp-validation-for="StyleName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Era" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="Era" class="form-control">
+                @foreach (var era in Lists.Era)
+                {
+                    <option>@era</option>
+                }
+            </select>
+            <span asp-validation-for="Era" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Добавить</button>
+        </div>
+    </div>
+</form>

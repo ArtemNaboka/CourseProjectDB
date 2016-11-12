@@ -1,0 +1,42 @@
+﻿.addBtn, .styleContainer
+{
+    margin-top: 10px;
+}
+
+.addBtn
+{
+    margin-top: -750px;
+}
+
+table
+{
+    margin-top:-350px;
+}
+
+td
+{
+    border-color:black;
+    border:1px solid;
+}
+
+td
+{
+    padding: 10px;
+    padding-right:30px;
+    font-size:16px;
+}
+
+.column
+{
+    display: inline-block;
+}
+
+
+.features
+{
+    position: relative;
+    margin-right:100px;
+    margin-left: -50px;
+    margin-top:50px;
+}
+
