@@ -25,8 +25,67 @@ namespace CourseProjectSculptureWorks.Controllers
             return View();
         }
 
+        #region SculptorController
+        public IActionResult Sculptors()
+        {
+            return View(_db.Sculptors.ToList());
+        }
 
 
+        [HttpGet]
+        public IActionResult AddNewSculptor()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult AddNewSculptor(Sculptor sculptor)
+        {
+            if (sculptor.YearOfBirth > sculptor.YearOfDeath)
+                ModelState.AddModelError("Dates", "Год смерти скульптора должен быть меньше года рождения");
+            if (ModelState.IsValid)
+            {
+                _db.Sculptors.Add(sculptor);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(AddNewSculptor));
+            }
+            return View(sculptor);
+        }
+
+        [HttpGet]
+        public IActionResult EditSculptor(int? sculptorId)
+        {
+            if (sculptorId == null) return NotFound();
+            var sculptor = _db.Sculptors.Single(s => s.SculptorId == sculptorId);
+            return View(sculptor);
+        } 
+
+        [HttpPost]
+        public IActionResult EditSculptor(Sculptor sculptor)
+        {
+            if(sculptor.YearOfBirth > sculptor.YearOfDeath)
+                ModelState.AddModelError("Dates", "Год смерти скульптора должен быть меньше года рождения");
+            if(ModelState.IsValid)
+            {
+                _db.Update(sculptor);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Sculptors));
+            }
+            return View(sculptor);
+        }
+
+        [HttpPost]
+        public bool DeleteSculptor(IntegerModel model)
+        {
+            var sculptor = _db.Sculptors.Single(s => s.SculptorId == model.Integer);
+            _db.Sculptors.Remove(sculptor);
+            _db.SaveChanges();
+            return _db.Sculptors != null && _db.Sculptors.Count() != 0;
+        }
+        #endregion
+
+        #region StyleController
         [HttpGet]
         public IActionResult Styles(string searchString = null, int sortNum = 0, string[] boxFilter = null)
         {
@@ -57,7 +116,6 @@ namespace CourseProjectSculptureWorks.Controllers
                 searchedStyles = searchedStyles.Where(s => boxFilter.Contains(s.Era)).ToList();
                 foreach (var filter in boxFilter)
                 {
-                    //searchedStyles = searchedStyles.Where(s => s.Era == filter).ToList();
                     if (filter == "Античность")
                         filters.Add(1);
                     else if (filter == "Средневековье")
@@ -73,29 +131,11 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult Styles()
-        //{
-        //    return View(_db.Styles.ToList());
-        //}
-
-
-        //[HttpPost]
-        //public IActionResult Styles(string searchString)
-        //{
-        //    if (searchString == null) searchString = String.Empty;
-        //    var searchedStyles = _db.Styles.Where(s => s.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-        //        || s.Country.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-        //    ViewBag.SearchString = searchString;
-        //    return View(searchedStyles);
-        //}
-
-
         [HttpGet]
         public IActionResult EditStyle(int? styleId)
         {
             if (styleId == null) return NotFound();
-            var style = _db.Styles.Single(s => s.Id == styleId);
+            var style = _db.Styles.Single(s => s.StyleId == styleId);
             return View(style);
         }
 
@@ -135,13 +175,14 @@ namespace CourseProjectSculptureWorks.Controllers
         [HttpPost]
         public bool DeleteStyle(IntegerModel model)
         {
-            var style = _db.Styles.Single(s => s.Id == model.Integer);
+            var style = _db.Styles.Single(s => s.StyleId == model.Integer);
             _db.Styles.Remove(style);
             _db.SaveChanges();
             return _db.Styles != null && _db.Styles.Count() != 0;
         }
+        #endregion
 
-
+        #region Shlak
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -160,23 +201,6 @@ namespace CourseProjectSculptureWorks.Controllers
         {
             return View();
         }
-
-
-
-        public IActionResult ChangeStyleList(IntegerModel model)
-        {
-            if (model.Integer == 1)
-                return RedirectToAction(nameof(Styles), new { styles = _db.Styles.OrderBy(s => s.Era) });
-            else if(model.Integer == 2)
-                return RedirectToAction(nameof(Styles), new { styles = _db.Styles.OrderBy(s => s.Country) });
-            return null;
-        }
-
-        public IActionResult SearchStyles(string searchString)
-        {
-            var searchedStyles = _db.Styles.Where(s => s.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                || s.Country.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-            return RedirectToAction(nameof(Styles), new { styles = searchedStyles });
-        }
+        #endregion
     }
 }

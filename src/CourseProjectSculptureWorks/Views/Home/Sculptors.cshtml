@@ -1,0 +1,48 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Sculptor>
+
+@{
+    ViewData["Title"] = "Скульпторы";
+}
+
+<link rel="stylesheet" href="~/css/sculptors.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/sculptors.js"></script>
+
+<div class="column features">
+
+</div>
+
+<div class="column">
+    <a asp-action="AddNewSculptor" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить нового скульптора</a>
+    <div class="styleContainer">
+        @if (Model != null && Model.Count != 0)
+        {
+            <table id="styleTable">
+                <tr style="background-color:aqua;">
+                    <td><b>Имя</b></td>
+                    <td><b>Страна</b></td>
+                    <td><b>Год рождения</b></td>
+                    <td><b>Год смерти</b></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @foreach (var sculptor in Model)
+                {
+                    <tr id="@sculptor.SculptorId">
+                        <td>@sculptor.Name</td>
+                        <td>@sculptor.Country</td>
+                        <td>@sculptor.YearOfBirth</td>
+                        <td>@sculptor.YearOfDeath</td>
+                        <td><a class="btn btn-info" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a class="btn btn-danger del" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h3>В базе данных отсутствует информация о скульпторах...</h3>
+        }
+    </div>
+</div>

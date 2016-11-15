@@ -13,6 +13,7 @@ namespace CourseProjectSculptureWorks.Data
     {
         public DbSet<Style> Styles { get; set; }
         public DbSet<Sculpture> Sculptures { get; set; }
+        public DbSet<Sculptor> Sculptors { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

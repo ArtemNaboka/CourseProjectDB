@@ -13,18 +13,9 @@
                     if (data)
                         $("#" + styleId).remove();
                     else
-                        $("#styleTable").replaceWith("<h3>В базе данных отсутствует информация о стилях скульптуры...</h3>");
+                        $("#styleTable").replaceWith("<h3>В базе данных отсутствует искомая информация о стилях скульптуры...</h3>");
                 }
             });
         }
     });
-
-    //$("input[name=radioSort]").change(function () {
-    //    var model = {
-    //        Integer: $('input:radio[name=radioSort]:checked').val()
-    //    };
-    //    var request = getXmlHttpRequest(); // создание объекта XmlHttpRequest
-    //    request.open('GET', location + model, false); // готовим сам запрос
-    //    request.send(null);
-    //});
 });

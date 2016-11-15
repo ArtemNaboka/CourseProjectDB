@@ -1,0 +1,47 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model Sculptor
+
+@{
+    ViewData["Title"] = "Редактировать информацию о скульпторе";
+}
+
+<form asp-controller="Home" asp-action="EditSculptor" method="post" class="form-horizontal">
+    <h4>Редактировать информацию о скульпторе</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" value="@Model.SculptorId" asp-for="@Model.SculptorId" />
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="YearOfBirth" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="YearOfBirth" class="form-control" />
+            <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="YearOfDeath" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="YearOfDeath" class="form-control" />
+            <span asp-validation-for="YearOfDeath" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Сохранить</button>
+        </div>
+    </div>
+</form>
+

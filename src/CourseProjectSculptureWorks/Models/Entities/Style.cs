@@ -8,7 +8,8 @@ namespace CourseProjectSculptureWorks.Models.Entities
 {
     public class Style
     {
-        public int Id { get; set; }
+        [Key]
+        public int StyleId { get; set; }
 
         [Display(Name = "Название стиля")]
         public string StyleName { get; set; }
