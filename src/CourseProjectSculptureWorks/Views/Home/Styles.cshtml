@@ -47,8 +47,8 @@
     </form>
 </div>
 
-<div class="column">
-    <a style="position:fixed;" asp-action="CreateNewStyle" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить новый стиль</a>
+<div class="column mainPart">
+    <a asp-action="CreateNewStyle" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить новый стиль</a>
     <div class="styleContainer">
         @if (Model != null && Model.Count != 0)
         {
@@ -75,7 +75,7 @@
         }
         else
         {
-            <h3>В базе данных отсутствует информация о стилях скульптуры...</h3>
+            <h3>В базе данных отсутствует искомая информация о стилях скульптуры...</h3>
         }
     </div>
 </div>

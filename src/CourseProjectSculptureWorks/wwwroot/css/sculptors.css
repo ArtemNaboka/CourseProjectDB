@@ -1,16 +1,27 @@
-﻿
+﻿.sculptorContainer
+{
+    margin-top: 20px;
+}
+
+
 td
 {
     border-color:black;
     border:1px solid;
     padding: 10px;
-    padding-right:30px;
+    padding-left:15px;
+    padding-right:15px;
     font-size:16px;
     text-align:center;
 }
 
-
-.addBtn
+.column
 {
-    margin: 100px, 0;
+    display: inline-table;
+    margin-top: 30px;
+}
+
+.features
+{
+    margin: 40px 50px 0 -30px;
 }

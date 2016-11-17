@@ -26,9 +26,53 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
         #region SculptorController
-        public IActionResult Sculptors()
+        public IActionResult Sculptors(int searchCriteria = 0, string searchString = null, int sortNum = 0)
         {
-            return View(_db.Sculptors.ToList());
+            var searchedSculptors = _db.Sculptors.ToList();
+            if (searchString != null && searchString != String.Empty)
+            {
+                int year;
+                if (int.TryParse(searchString, out year))
+                {
+                    if (searchCriteria == 3)
+                        searchedSculptors = _db.Sculptors.Where(s => s.YearOfBirth == year).ToList();
+                    else if (searchCriteria == 4)
+                        searchedSculptors = _db.Sculptors.Where(s => s.YearOfDeath == year).ToList();      
+                }
+                else
+                {
+                    if (searchCriteria == 1)
+                        searchedSculptors = _db.Sculptors.Where(s => s.Name.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+                    else if(searchCriteria == 2)
+                        searchedSculptors = _db.Sculptors.Where(s => s.Country.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+                }
+                ViewBag.SearchString = searchString;
+                ViewBag.SearchCriteria = searchCriteria;
+            }
+            //if(searchString != null && searchString != String.Empty)
+            //{
+            //    int year;
+            //    if (int.TryParse(searchString, out year))
+            //        searchedSculptors = _db.Sculptors.Where(s => s.YearOfBirth == year || s.YearOfDeath == year).ToList();
+            //    else
+            //        searchedSculptors = _db.Sculptors.Where(s => s.Name.ToLower().Trim().Contains(searchString.ToLower().Trim()) 
+            //                        || s.Country.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+            //    ViewBag.SearchString = searchString;
+            //}
+            if (sortNum != 0)
+            {
+                switch (sortNum)
+                {
+                    case 1:
+                        searchedSculptors = searchedSculptors.OrderBy(s => s.Country).ToList();
+                        break;
+                    case 2:
+                        searchedSculptors = searchedSculptors.OrderBy(s => s.YearOfBirth).ToList();
+                        break;
+                }
+                ViewBag.Checked = sortNum;
+            }
+            return View(searchedSculptors);
         }
 
 
@@ -48,7 +92,7 @@ namespace CourseProjectSculptureWorks.Controllers
             {
                 _db.Sculptors.Add(sculptor);
                 _db.SaveChanges();
-                return RedirectToAction(nameof(AddNewSculptor));
+                return RedirectToAction(nameof(Sculptors));
             }
             return View(sculptor);
         }

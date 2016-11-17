@@ -13,17 +13,21 @@ namespace CourseProjectSculptureWorks.Models.Entities
 
         [Required]
         [StringLength(25, MinimumLength = 3)]
+        [Display(Name = "Имя скульптора")]
         public string Name { get; set; }
 
         [Required]
         [StringLength(25, MinimumLength = 3)]
+        [Display(Name = "Страна")]
         public string Country { get; set; }
 
         [Required]
         [Range(0, 1995)]
+        [Display(Name = "Год рождения")]
         public int YearOfBirth { get; set; }
 
         [Range(0, 2016)]
+        [Display(Name = "Год смерти (необязательно)")]
         public int? YearOfDeath { get; set; }
 
         public virtual List<Sculpture> Sculptures { get; set; }

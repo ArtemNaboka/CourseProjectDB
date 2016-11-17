@@ -18,4 +18,8 @@
             });
         }
     });
+
+    $(".searchSelect").change(function () {
+        $("input[name=searchString]").removeAttr("disabled");
+    });
 });
