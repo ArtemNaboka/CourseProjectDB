@@ -1,0 +1,71 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model Location
+
+@{
+    ViewData["Title"] = "Добавить местоположение";
+}
+
+<form asp-controller="Home" asp-action="AddNewLocation" method="post" class="form-horizontal">
+    <h4>Добавление местоположения</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="LocationName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="LocationName" class="form-control" />
+            <span asp-validation-for="LocationName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LocationType" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="LocationType" class="form-control">
+                @foreach (var type in Lists.LocationTypes)
+                {
+                    <option>@type</option>
+                }
+            </select>
+            <span asp-validation-for="LocationType" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="PriceForPerson" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PriceForPerson" class="form-control" />
+            <span asp-validation-for="PriceForPerson" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="DurationOfExcursion" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="DurationOfExcursion" class="form-control" />
+            <span asp-validation-for="DurationOfExcursion" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Добавить</button>
+        </div>
+    </div>
+</form>

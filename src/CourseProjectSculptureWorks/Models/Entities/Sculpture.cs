@@ -35,5 +35,6 @@ namespace CourseProjectSculptureWorks.Models.Entities
 
         public virtual Style Style { get; set; }
         public virtual Sculptor Sculptor { get; set; }
+        public virtual Location Location { get; set; }
     }
 }

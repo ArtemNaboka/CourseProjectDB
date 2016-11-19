@@ -28,5 +28,6 @@ namespace CourseProjectSculptureWorks.Models
             "Сквер",
             "Выставка"
         };
+
     }
 }

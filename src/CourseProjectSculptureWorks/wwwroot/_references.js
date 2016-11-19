@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
-/// <reference path="js/sculptor.js" />
+/// <reference path="js/locations.js" />
+/// <reference path="js/sculptors.js" />
 /// <reference path="js/site.js" />
 /// <reference path="js/styles.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />

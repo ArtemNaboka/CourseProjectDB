@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CourseProjectSculptures</title>
+    <title>@ViewData["Title"]</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -32,18 +32,18 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Главная</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Объекты<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">База данных<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Скульптуры</a></li>
                             <li><a asp-controller="Home" asp-action="Sculptors">Скульпторы</a></li>
                             <li><a asp-controller="Home" asp-action="Styles">Стили</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Отдельная ссылка</a></li>
+                            <li><a asp-action="Locations" asp-controller="Home">Местоположения</a></li>
                             <li class="divider"></li>
                             <li><a href="#">Еще одна отдельная ссылка</a></li>
                         </ul>
                     </li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">О нас</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">Справка</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Контакты</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
@@ -54,7 +54,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2016 - CourseProjectSculptures</p>
+            <p>&copy; 2016 - Учет произведений скульптуры</p>
         </footer>
     </div>
 

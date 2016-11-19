@@ -8,9 +8,10 @@ using CourseProjectSculptureWorks.Data;
 namespace CourseProjectSculptureWorks.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161117205113_AgainMigration")]
+    partial class AgainMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -65,39 +66,6 @@ namespace CourseProjectSculptureWorks.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Location", b =>
-                {
-                    b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 30);
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 30);
-
-                    b.Property<int>("DurationOfExcursion");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 50);
-
-                    b.Property<string>("LocationType")
-                        .IsRequired();
-
-                    b.Property<decimal>("PriceForPerson");
-
-                    b.HasKey("LocationId");
-
-                    b.ToTable("Locations");
-                });
-
             modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Sculptor", b =>
                 {
                     b.Property<int>("SculptorId")
@@ -127,8 +95,6 @@ namespace CourseProjectSculptureWorks.Data.Migrations
 
                     b.Property<double>("Height");
 
-                    b.Property<int?>("LocationId");
-
                     b.Property<string>("Material")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 20);
@@ -149,8 +115,6 @@ namespace CourseProjectSculptureWorks.Data.Migrations
                     b.Property<int>("Year");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("SculptorId");
 
@@ -287,10 +251,6 @@ namespace CourseProjectSculptureWorks.Data.Migrations
 
             modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Sculpture", b =>
                 {
-                    b.HasOne("CourseProjectSculptureWorks.Models.Entities.Location", "Location")
-                        .WithMany("Sculptures")
-                        .HasForeignKey("LocationId");
-
                     b.HasOne("CourseProjectSculptureWorks.Models.Entities.Sculptor", "Sculptor")
                         .WithMany("Sculptures")
                         .HasForeignKey("SculptorId");

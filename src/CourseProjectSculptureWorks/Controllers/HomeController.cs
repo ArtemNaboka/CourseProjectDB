@@ -32,12 +32,17 @@ namespace CourseProjectSculptureWorks.Controllers
             if (searchString != null && searchString != String.Empty)
             {
                 int year;
-                if (int.TryParse(searchString, out year))
+                if (searchCriteria == 3 || searchCriteria == 4)
                 {
-                    if (searchCriteria == 3)
-                        searchedSculptors = _db.Sculptors.Where(s => s.YearOfBirth == year).ToList();
-                    else if (searchCriteria == 4)
-                        searchedSculptors = _db.Sculptors.Where(s => s.YearOfDeath == year).ToList();      
+                    if (int.TryParse(searchString, out year))
+                    {
+                        if (searchCriteria == 3)
+                            searchedSculptors = _db.Sculptors.Where(s => s.YearOfBirth == year).ToList();
+                        else if (searchCriteria == 4)
+                            searchedSculptors = _db.Sculptors.Where(s => s.YearOfDeath == year).ToList();
+                    }
+                    else
+                        searchedSculptors = new List<Sculptor>();      
                 }
                 else
                 {
@@ -226,10 +231,123 @@ namespace CourseProjectSculptureWorks.Controllers
         }
         #endregion
 
+        #region
+        public IActionResult Locations(string searchString, int sortNum, string[] boxFilter)
+        {
+            var searchedLocation = _db.Locations.ToList();
+            if (searchString != null && searchString != String.Empty)
+            {
+                searchedLocation = searchedLocation.Where(s => s.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Country.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.City.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Address.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.DurationOfExcursion.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.PriceForPerson.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                ViewBag.SearchString = searchString;
+            }
+            if (sortNum != 0)
+            {
+                switch (sortNum)
+                {
+                    case 1:
+                        searchedLocation = searchedLocation.OrderBy(s => s.LocationType).ToList();
+                        break;
+                    case 2:
+                        searchedLocation = searchedLocation.OrderBy(s => s.Country).ToList();
+                        break;
+                    case 3:
+                        searchedLocation = searchedLocation.OrderBy(s => s.City).ToList();
+                        break;
+                    case 4:
+                        searchedLocation = searchedLocation.OrderBy(s => s.PriceForPerson).ToList();
+                        break;
+                    case 5:
+                        searchedLocation = searchedLocation.OrderBy(s => s.DurationOfExcursion).ToList();
+                        break;
+                }
+                ViewBag.Checked = sortNum;
+            }
+            if (boxFilter != null && boxFilter.Length != 0)
+            {
+                var temp = searchedLocation;
+                List<int> filters = new List<int>();
+                searchedLocation = searchedLocation.Where(s => boxFilter.Contains(s.LocationType)).ToList();
+                foreach (var filter in boxFilter)
+                {
+                    if (filter == "Музей")
+                        filters.Add(1);
+                    else if (filter == "Парк")
+                        filters.Add(2);
+                    else if (filter == "Сквер")
+                        filters.Add(3);
+                    else if (filter == "Выставка")
+                        filters.Add(4);
+                }
+                ViewBag.Filters = filters;
+            }
+            return View(searchedLocation);
+        }
+
+
+        [HttpGet]
+        public IActionResult AddNewLocation()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult AddNewLocation(Location location)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Locations.Add(location);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Locations));
+            }
+            return View(location);
+        }
+
+
+        [HttpGet]
+        public IActionResult EditLocation(int? locationId)
+        {
+            if (locationId == null)
+                return NotFound();
+            var location = _db.Locations.Single(l => l.LocationId == locationId);
+            return View(location);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditLocation(Location location)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Locations.Update(location);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Locations));
+            }
+            return View(location);
+        }
+
+
+        [HttpPost]
+        public bool DeleteLocation(IntegerModel model)
+        {
+            var location = _db.Locations.Single(l => l.LocationId == model.Integer);
+            _db.Locations.Remove(location);
+            _db.SaveChanges();
+            return _db.Locations != null && _db.Locations.Count() != 0;
+        }
+
+        #endregion
+
+
         #region Shlak
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Набока Артем ПИ-15-1";
 
             return View();
         }

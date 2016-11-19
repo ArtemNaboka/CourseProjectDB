@@ -39,11 +39,11 @@
     </form>
 </div>
 <div class="column">
-    <a asp-action="AddNewSculptor" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить нового скульптора</a>
+    <a asp-action="AddNewSculptor" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить скульптора</a>
     <div class="sculptorContainer">
         @if (Model != null && Model.Count != 0)
         {
-            <table id="styleTable">
+            <table id="sculptorTable">
                 <tr style="background-color:aqua;">
                     <td><b>Имя</b></td>
                     <td><b>Страна</b></td>
@@ -67,7 +67,7 @@
         }
         else
         {
-            <h3>В базе данных отсутствует информация о скульпторах...</h3>
+            <h3>В базе данных отсутствует искомая информация о скульпторах...</h3>
         }
     </div>
 </div>

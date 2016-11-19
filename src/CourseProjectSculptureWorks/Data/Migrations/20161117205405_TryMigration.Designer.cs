@@ -8,9 +8,10 @@ using CourseProjectSculptureWorks.Data;
 namespace CourseProjectSculptureWorks.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161117205405_TryMigration")]
+    partial class TryMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -287,7 +288,7 @@ namespace CourseProjectSculptureWorks.Data.Migrations
 
             modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Sculpture", b =>
                 {
-                    b.HasOne("CourseProjectSculptureWorks.Models.Entities.Location", "Location")
+                    b.HasOne("CourseProjectSculptureWorks.Models.Entities.Location")
                         .WithMany("Sculptures")
                         .HasForeignKey("LocationId");
 
