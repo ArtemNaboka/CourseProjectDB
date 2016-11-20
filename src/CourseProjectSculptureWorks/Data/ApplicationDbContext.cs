@@ -16,6 +16,7 @@ namespace CourseProjectSculptureWorks.Data
         public DbSet<Sculptor> Sculptors { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<ExcursionType> ExcursionTypes { get; set; }
+        public DbSet<Excursion> Excursion { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

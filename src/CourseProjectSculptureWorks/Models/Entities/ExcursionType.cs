@@ -26,11 +26,12 @@ namespace CourseProjectSculptureWorks.Models.Entities
         [Display(Name = "Минимальное кол-во человек")]
         public int MinNumberOfPeople { get; set; }
 
-
         [Required]
         [Range(1, 500)]
         [Display(Name = "Максимальное кол-во человек")]
         public int MaxNumberOfPeople { get; set; }
 
+
+        public virtual List<Excursion> Excursions { get; set; }
     }
 }

@@ -21,12 +21,6 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
 
         #region SculptureController
         [HttpGet]
@@ -192,9 +186,9 @@ namespace CourseProjectSculptureWorks.Controllers
         #endregion
 
         #region SculptorController
-        public IActionResult Sculptors(int searchCriteria = 0, string searchString = null, int sortNum = 0)
+        public async Task<IActionResult> Sculptors(int searchCriteria = 0, string searchString = null, int sortNum = 0)
         {
-            var searchedSculptors = _db.Sculptors.ToList();
+            var searchedSculptors = await _db.Sculptors.ToListAsync();
             if (searchString != null && searchString != String.Empty)
             {
                 int year;
@@ -203,9 +197,9 @@ namespace CourseProjectSculptureWorks.Controllers
                     if (int.TryParse(searchString, out year))
                     {
                         if (searchCriteria == 3)
-                            searchedSculptors = _db.Sculptors.Where(s => s.YearOfBirth == year).ToList();
+                            searchedSculptors = await _db.Sculptors.Where(s => s.YearOfBirth == year).ToListAsync();
                         else if (searchCriteria == 4)
-                            searchedSculptors = _db.Sculptors.Where(s => s.YearOfDeath == year).ToList();
+                            searchedSculptors = await _db.Sculptors.Where(s => s.YearOfDeath == year).ToListAsync();
                     }
                     else
                         searchedSculptors = new List<Sculptor>();      
@@ -213,9 +207,9 @@ namespace CourseProjectSculptureWorks.Controllers
                 else
                 {
                     if (searchCriteria == 1)
-                        searchedSculptors = _db.Sculptors.Where(s => s.Name.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+                        searchedSculptors = await _db.Sculptors.Where(s => s.Name.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToListAsync();
                     else if(searchCriteria == 2)
-                        searchedSculptors = _db.Sculptors.Where(s => s.Country.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+                        searchedSculptors = await _db.Sculptors.Where(s => s.Country.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToListAsync();
                 }
                 ViewBag.SearchString = searchString;
                 ViewBag.SearchCriteria = searchCriteria;
@@ -255,56 +249,56 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpPost]
-        public IActionResult AddNewSculptor(Sculptor sculptor)
+        public async Task<IActionResult> AddNewSculptor(Sculptor sculptor)
         {
             if (sculptor.YearOfBirth > sculptor.YearOfDeath)
                 ModelState.AddModelError("Dates", "Год смерти скульптора должен быть меньше года рождения");
             if (ModelState.IsValid)
             {
                 _db.Sculptors.Add(sculptor);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Sculptors));
             }
             return View(sculptor);
         }
 
         [HttpGet]
-        public IActionResult EditSculptor(int? sculptorId)
+        public async Task<IActionResult> EditSculptor(int? sculptorId)
         {
             if (sculptorId == null) return NotFound();
-            var sculptor = _db.Sculptors.Single(s => s.SculptorId == sculptorId);
+            var sculptor = await _db.Sculptors.SingleAsync(s => s.SculptorId == sculptorId);
             return View(sculptor);
         } 
 
         [HttpPost]
-        public IActionResult EditSculptor(Sculptor sculptor)
+        public async Task<IActionResult> EditSculptor(Sculptor sculptor)
         {
             if(sculptor.YearOfBirth > sculptor.YearOfDeath)
                 ModelState.AddModelError("Dates", "Год смерти скульптора должен быть меньше года рождения");
             if(ModelState.IsValid)
             {
                 _db.Update(sculptor);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Sculptors));
             }
             return View(sculptor);
         }
 
         [HttpPost]
-        public bool DeleteSculptor(IntegerModel model)
+        public async Task<bool> DeleteSculptor(IntegerModel model)
         {
             var sculptor = _db.Sculptors.Single(s => s.SculptorId == model.Integer);
             _db.Sculptors.Remove(sculptor);
-            _db.SaveChanges();
-            return _db.Sculptors != null && _db.Sculptors.Count() != 0;
+            await _db.SaveChangesAsync();
+            return _db.Sculptors != null && await _db.Sculptors.CountAsync() != 0;
         }
         #endregion
 
         #region StyleController
         [HttpGet]
-        public IActionResult Styles(string searchString = null, int sortNum = 0, string[] boxFilter = null)
+        public async Task<IActionResult> Styles(string searchString = null, int sortNum = 0, string[] boxFilter = null)
         {
-            var searchedStyles = _db.Styles.ToList();
+            var searchedStyles = await _db.Styles.ToListAsync();
             if (searchString != null && searchString != String.Empty)
             {
                 searchedStyles = searchedStyles.Where(s => s.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
@@ -347,21 +341,21 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpGet]
-        public IActionResult EditStyle(int? styleId)
+        public async Task<IActionResult> EditStyle(int? styleId)
         {
             if (styleId == null) return NotFound();
-            var style = _db.Styles.Single(s => s.StyleId == styleId);
+            var style = await _db.Styles.SingleAsync(s => s.StyleId == styleId);
             return View(style);
         }
 
 
         [HttpPost]
-        public IActionResult EditStyle(Style style)
+        public async Task<IActionResult> EditStyle(Style style)
         {
             if (ModelState.IsValid)
             {
                 _db.Styles.Update(style);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Styles));
             }
             return View(style);
@@ -375,12 +369,12 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateNewStyle(Style style)
+        public async Task<IActionResult> CreateNewStyle(Style style)
         {
             if (ModelState.IsValid)
             {
                 _db.Styles.Add(style);                
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Styles));
             }
             return View(style);
@@ -388,19 +382,19 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpPost]
-        public bool DeleteStyle(IntegerModel model)
+        public async Task<bool> DeleteStyle(IntegerModel model)
         {
-            var style = _db.Styles.Single(s => s.StyleId == model.Integer);
+            var style = await _db.Styles.SingleAsync(s => s.StyleId == model.Integer);
             _db.Styles.Remove(style);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return _db.Styles != null && _db.Styles.Count() != 0;
         }
         #endregion
 
         #region LocationController
-        public IActionResult Locations(string searchString, int sortNum, string[] boxFilter)
+        public async Task<IActionResult> Locations(string searchString, int sortNum, string[] boxFilter)
         {
-            var searchedLocation = _db.Locations.ToList();
+            var searchedLocation = await _db.Locations.ToListAsync();
             if (searchString != null && searchString != String.Empty)
             {
                 searchedLocation = searchedLocation.Where(s => s.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
@@ -463,12 +457,12 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpPost]
-        public IActionResult AddNewLocation(Location location)
+        public async Task<IActionResult> AddNewLocation(Location location)
         {
             if(ModelState.IsValid)
             {
                 _db.Locations.Add(location);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Locations));
             }
             return View(location);
@@ -476,22 +470,22 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpGet]
-        public IActionResult EditLocation(int? locationId)
+        public async Task<IActionResult> EditLocation(int? locationId)
         {
             if (locationId == null)
                 return NotFound();
-            var location = _db.Locations.Single(l => l.LocationId == locationId);
+            var location = await _db.Locations.SingleAsync(l => l.LocationId == locationId);
             return View(location);
         }
 
 
         [HttpPost]
-        public IActionResult EditLocation(Location location)
+        public async Task<IActionResult> EditLocation(Location location)
         {
             if(ModelState.IsValid)
             {
                 _db.Locations.Update(location);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Locations));
             }
             return View(location);
@@ -499,22 +493,53 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpPost]
-        public bool DeleteLocation(IntegerModel model)
+        public async Task<bool> DeleteLocation(IntegerModel model)
         {
-            var location = _db.Locations.Single(l => l.LocationId == model.Integer);
+            var location = await _db.Locations.SingleAsync(l => l.LocationId == model.Integer);
             _db.Locations.Remove(location);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return _db.Locations != null && _db.Locations.Count() != 0;
         }
 
         #endregion
 
-        #region ExcursionTypesController
+        #region ExcursionController
 
-        // Добавить фильтр, сорт и поиск
-        public async Task<IActionResult> ExcursionTypes()
+        public async Task<IActionResult> Excursions()
         {
-            return View(await _db.ExcursionTypes.ToListAsync());
+            return View(await _db.Excursion.ToListAsync());
+        }
+
+        #endregion
+
+        #region ExcursionTypesController
+        public async Task<IActionResult> ExcursionTypes(string searchString = null, int sortNum = 0)
+        {
+            var searchedTypesOfExcursions = await _db.ExcursionTypes.ToListAsync();
+            if (searchString != null && searchString != String.Empty)
+            {
+                searchedTypesOfExcursions = searchedTypesOfExcursions.Where(e => e.NameOfType.Trim().ToLower()
+                    .Contains(searchString.Trim().ToLower()))
+                    .ToList();
+                ViewBag.SearchString = searchString;
+            }
+            if (sortNum != 0)
+            {
+                switch (sortNum)
+                {
+                    case 1:
+                        searchedTypesOfExcursions = searchedTypesOfExcursions.OrderBy(e => e.Discount).ToList();
+                        break;
+                    case 2:
+                        searchedTypesOfExcursions = searchedTypesOfExcursions.OrderBy(e => e.MinNumberOfPeople).ToList();
+                        break;
+                    case 3:
+                        searchedTypesOfExcursions = searchedTypesOfExcursions.OrderBy(e => e.MaxNumberOfPeople).ToList();
+                        break;
+                }
+                ViewBag.Checked = sortNum;
+            }
+            return View(searchedTypesOfExcursions);
         }
 
         [HttpGet]
@@ -527,6 +552,8 @@ namespace CourseProjectSculptureWorks.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNewExcursionType(ExcursionType excursionType)
         {
+            if (excursionType.MinNumberOfPeople > excursionType.MaxNumberOfPeople)
+                ModelState.AddModelError("NumberOfPeopleError", "Минимальное количество людей должно быть меньше максимального");
             if(ModelState.IsValid)
             {
                 _db.ExcursionTypes.Add(excursionType);
@@ -549,13 +576,15 @@ namespace CourseProjectSculptureWorks.Controllers
         [HttpPost]
         public async Task<IActionResult> EditExcursionType(ExcursionType excursionType)
         {
-            if(ModelState.IsValid)
+            if (excursionType.MinNumberOfPeople > excursionType.MaxNumberOfPeople)
+                ModelState.AddModelError("NumberOfPeopleError", "Минимальное количество людей должно быть меньше максимального");
+            if (ModelState.IsValid)
             {
                 _db.ExcursionTypes.Update(excursionType);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(ExcursionTypes));
             }
-            return View();
+            return View(excursionType);
         }
 
 
@@ -586,6 +615,13 @@ namespace CourseProjectSculptureWorks.Controllers
         #endregion
 
         #region Other
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Набока Артем ПИ-15-1";

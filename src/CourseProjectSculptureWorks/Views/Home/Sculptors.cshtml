@@ -12,7 +12,8 @@
 <script src="~/js/sculptors.js"></script>
 
 <div class="column features">
-    <form method="get" class="form-horizontal">
+    <a class="btn btn-warning" asp-action="Sculptors" style="width:100%;">Показать все</a>
+    <form method="get" class="form-horizontal" style="margin-top:40px;">
         <select class="form-control searchSelect" name="searchCriteria">
             <option value="0" disabled selected>Критерий поиска</option>
             <option value="1">Имя</option>
@@ -60,7 +61,16 @@
                         <td>@sculptor.Name</td>
                         <td>@sculptor.Country</td>
                         <td>@sculptor.YearOfBirth год</td>
-                        <td>@sculptor.YearOfDeath год</td>
+                        <td>
+                            @if(sculptor.YearOfDeath != null)
+                            {
+                                <span>@sculptor.YearOfDeath год</span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
                         <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td><a class="del" style="color:crimson;" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>

@@ -30,14 +30,14 @@
                 <label><input type="radio" name="sortNum" value="2">По минимальному кол-ву человек</label>
             </div>
             <div class="radio">
-                <label><input type="radio" name="sortNum" value="2">По максимальному кол-ву человек</label>
+                <label><input type="radio" name="sortNum" value="3">По максимальному кол-ву человек</label>
             </div>
             <input style="width:100%; margin-top:5px;" type="submit" value="Сортировать" class="btn btn-primary" />
         </div>
     </form>
 </div>
 <div class="column">
-    <a asp-action="AddNewExcursionType" class="addBtn">Добавить вид экскурсии</a>
+    <a asp-action="AddNewExcursionType"  class="addBtn"><span class="glyphicon glyphicon-plus"></span>   Добавить вид экскурсии</a>
     @if (Model != null && Model.Count != 0)
     {
         <table class="simple-little-table" cellspacing='0' id="excursionTypeTable">
@@ -68,3 +68,11 @@
         <h3 style="margin-left:20px;">В базе данных отсутствует искомая информация о видах экскурсий...</h3>
     }
 </div>
+
+@if (ViewBag.Checked != 0)
+{
+    <script>
+        var checkedNum = @ViewBag.Checked;
+        $("input[value=" + checkedNum + "]").attr("checked", true);
+    </script>
+}
