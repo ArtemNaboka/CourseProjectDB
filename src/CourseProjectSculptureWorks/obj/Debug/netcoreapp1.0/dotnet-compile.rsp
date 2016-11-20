@@ -265,7 +265,8 @@ C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\RemoveLoginViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\SetPasswordViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\VerifyPhoneNumberViewModel.cs
-C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\SculptureViewModels\IntegerModel.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\IntegerModel.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\SculptureViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Services\IEmailSender.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Services\ISmsSender.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Services\MessageServices.cs

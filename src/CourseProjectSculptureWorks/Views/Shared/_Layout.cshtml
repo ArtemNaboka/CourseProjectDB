@@ -34,7 +34,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">База данных<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Скульптуры</a></li>
+                            <li><a asp-controller="Home" asp-action="Sculptures">Скульптуры</a></li>
                             <li><a asp-controller="Home" asp-action="Sculptors">Скульпторы</a></li>
                             <li><a asp-controller="Home" asp-action="Styles">Стили</a></li>
                             <li class="divider"></li>
@@ -43,8 +43,15 @@
                             <li><a href="#">Еще одна отдельная ссылка</a></li>
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Статистика<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Home" asp-action="Sculptures">Количество скульптур за определенное время</a></li>
+                            <li><a asp-controller="Home" asp-action="Sculptors">Скульпторы</a></li>
+                            <li><a asp-controller="Home" asp-action="Styles">Стили</a></li>
+                        </ul>
+                    </li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">Справка</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Контакты</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

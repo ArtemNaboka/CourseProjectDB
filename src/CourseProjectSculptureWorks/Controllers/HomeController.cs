@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CourseProjectSculptureWorks.Data;
 using CourseProjectSculptureWorks.Models.Entities;
-using CourseProjectSculptureWorks.Models.SculptureViewModels;
-using System.Text;
+using CourseProjectSculptureWorks.Models.ViewModels;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseProjectSculptureWorks.Controllers
 {
@@ -24,6 +26,170 @@ namespace CourseProjectSculptureWorks.Controllers
         {
             return View();
         }
+
+
+        #region SculptureController
+        [HttpGet]
+        public async Task<IActionResult> Sculptures(string searchString = null, int sortNum = 0, string[] boxFilter = null)
+        {
+            var searchedSculptures = await _db.Sculptures.Include(s => s.Sculptor)
+                .Include(s => s.Style)
+                .Include(s => s.Location)
+                .ToListAsync();
+            if (searchString != null && searchString != String.Empty)
+            {
+                searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                ViewBag.SearchString = searchString;
+            }
+            if (sortNum != 0)
+            {
+                switch (sortNum)
+                {
+                    case 1:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Type).ToList();
+                        break;
+                    case 2:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Sculptor.Name).ToList();
+                        break;
+                    case 3:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Style.StyleName).ToList();
+                        break;
+                    case 4:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Location.LocationName).ToList();
+                        break;
+                    case 5:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Material).ToList();
+                        break;
+                    case 6:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Year).ToList();
+                        break;
+                    case 7:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Square).ToList();
+                        break;
+                    case 8:
+                        searchedSculptures = searchedSculptures.OrderBy(s => s.Height).ToList();
+                        break;
+                }
+                ViewBag.Checked = sortNum;
+            }
+            if (boxFilter != null && boxFilter.Length != 0)
+            {
+                var temp = searchedSculptures;
+                List<int> filters = new List<int>();
+                searchedSculptures = searchedSculptures.Where(s => boxFilter.Contains(s.Type)).ToList();
+                foreach (var filter in boxFilter)
+                {
+                    if (filter == "Круглая")
+                        filters.Add(1);
+                    else if (filter == "Рельефная")
+                        filters.Add(2);
+                }
+                ViewBag.Filters = filters;
+            }
+            return View(searchedSculptures);
+        }
+
+
+        [HttpGet]
+        public IActionResult AddNewSculpture()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewSculpture(SculptureViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var sculpture = new Sculpture
+                {
+                    Name = model.Name,
+                    Type = model.Type,
+                    Material = model.Material,
+                    Year = model.Year,
+                    Square = model.Square,
+                    Height = model.Height,
+                    Style = await _db.Styles.SingleAsync(s => s.StyleId == model.StyleId),
+                    Sculptor = await _db.Sculptors.SingleAsync(s => s.SculptorId == model.SculptorId),
+                    Location = await _db.Locations.SingleAsync(l => l.LocationId == model.LocationId)
+                };
+                _db.Sculptures.Add(sculpture);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Sculptures));
+            }
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> EditSculpture(int? sculptureId)
+        {
+            if (sculptureId == null)
+                return NotFound();
+            var sculpture = await _db.Sculptures
+                .Include(s => s.Sculptor)
+                .Include(s => s.Style)
+                .Include(s => s.Location).SingleAsync(s => s.Id == sculptureId.Value);
+            var sculptureViewModel = new SculptureViewModel
+            {
+                SculptureId = sculpture.Id,
+                Name = sculpture.Name,
+                Type = sculpture.Type,
+                Material = sculpture.Material,
+                Year = sculpture.Year,
+                Square = sculpture.Square,
+                Height = sculpture.Height,
+                StyleId = sculpture.Style.StyleId,
+                SculptorId = sculpture.Sculptor.SculptorId,
+                LocationId = sculpture.Location.LocationId
+            };
+            return View(sculptureViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditSculpture(SculptureViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var sculpture = new Sculpture
+                {
+                    Id = model.SculptureId,
+                    Name = model.Name,
+                    Type = model.Type,
+                    Material = model.Material,
+                    Year = model.Year,
+                    Square = model.Square,
+                    Height = model.Height,
+                    Style = await _db.Styles.SingleAsync(s => s.StyleId == model.StyleId),
+                    Sculptor = await _db.Sculptors.SingleAsync(s => s.SculptorId == model.SculptorId),
+                    Location = await _db.Locations.SingleAsync(l => l.LocationId == model.LocationId)
+                };
+                _db.Sculptures.Update(sculpture);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Sculptures));
+            }
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<bool> DeleteSculpture(IntegerModel model)
+        {
+            var sculpture = _db.Sculptures.Single(s => s.Id == model.Integer);
+            _db.Sculptures.Remove(sculpture);
+            await _db.SaveChangesAsync();
+            return _db.Sculptures != null && _db.Sculptures.Count() != 0;
+        }
+
+        #endregion
 
         #region SculptorController
         public IActionResult Sculptors(int searchCriteria = 0, string searchString = null, int sortNum = 0)
@@ -231,7 +397,7 @@ namespace CourseProjectSculptureWorks.Controllers
         }
         #endregion
 
-        #region
+        #region LocationController
         public IActionResult Locations(string searchString, int sortNum, string[] boxFilter)
         {
             var searchedLocation = _db.Locations.ToList();
@@ -344,12 +510,35 @@ namespace CourseProjectSculptureWorks.Controllers
         #endregion
 
 
-        #region Shlak
+        #region Statistics
+
+        public IActionResult NumberOfSculpturesForCertainTime()
+        {
+            var year = 1000;
+            int yearOfStart = DateTime.Now.Year - year;
+            var styles = _db.Sculptures.Include(s => s.Sculptor)
+                .Include(s => s.Style)
+                .Include(s => s.Location)
+                .ToListAsync();
+            var union = _db.Sculptures.Join(_db.Sculptors, s => s.Sculptor.SculptorId, s => s.SculptorId, new { });
+        }
+
+        #endregion
+
+        #region Other
         public IActionResult About()
         {
             ViewData["Message"] = "Набока Артем ПИ-15-1";
 
             return View();
+        }
+
+        public FileResult GetDoc([FromServices] IHostingEnvironment appEnvironment)
+        {
+            string file_path = Path.Combine(appEnvironment.ContentRootPath, "Docs/Набока Артем - Записка.docx");
+            string file_type = "application/docx";
+            string file_name = "Набока Артем - Записка.docx";
+            return PhysicalFile(file_path, file_type, file_name);
         }
 
         public IActionResult Contact()

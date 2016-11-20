@@ -30,7 +30,7 @@ namespace CourseProjectSculptureWorks.Models.Entities
         public double Square { get; set; }
 
         [Required]
-        [Range(0.2, 100)]
+        [Range(0.2, 1000)]
         public double Height { get; set; }
 
         public virtual Style Style { get; set; }

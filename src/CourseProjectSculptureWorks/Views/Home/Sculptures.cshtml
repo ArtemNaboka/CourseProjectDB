@@ -1,0 +1,103 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Sculpture>
+
+@{
+    ViewData["Title"] = "Скульптуры";
+}
+
+<link rel="stylesheet" href="~/css/sculptures.css" />
+<link rel="stylesheet" href="~/css/tableStyles.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/sculptures.js"></script>
+
+<a asp-action="AddNewSculpture" class="addBtn">Добавить скульптуру</a>
+<div class="features">
+    <form asp-action="Sculptures" method="get">
+        <div class="column">
+            <h4 style="margin-left:60px;">Поиск</h4>
+            <input name="searchString" value="@ViewBag.SearchString" type="text" class="form-control" placeholder="Название, стиль..." /><br />
+            <input style="width:100%;" type="submit" class="btn btn-info" value="Найти" />
+        </div>
+        <div class="column" style="margin-left:220px; margin-top:-13px; width:200px;">
+            <h4 style="margin-left:40px;">Сортировка</h4>
+            <select class="form-control" name="sortNum">
+                <option value="0">В исходном порядке</option>
+                <option value="1">По виду</option>
+                <option value="2">По скульптору</option>
+                <option value="3">По стилю</option>
+                <option value="4">По местоположению</option>
+                <option value="5">По материалу</option>
+                <option value="6">По году создания</option>
+                <option value="7">По площади</option>
+                <option value="8">По высоте</option>
+            </select><br />
+            <input style="width:100%;" type="submit" class="btn btn-info" value="Сортировать" />
+        </div>
+        <div style="margin-left:200px; margin-top:-10px; width:200px;" class="column">
+            <h4 style="margin-left:40px;">Фильтрация</h4>
+            <div class="checkbox">
+                <label><input type="checkbox" flag="1" name="boxFilter" value="Круглая">Круглая</label>
+            </div>
+            <div style="margin-left:25px;" class="checkbox">
+                <label><input type="checkbox" flag="2" name="boxFilter" value="Рельефная">Рельефная</label>
+            </div>
+            <input style="width:100%; margin-top:10px;" type="submit" class="btn btn-info" value="Фильтровать" />
+        </div>
+    </form>
+</div>
+<div>
+    @if (Model != null && Model.Count != 0)
+    {
+        <table class="simple-little-table" cellspacing='0' id="sculptureTable">
+            <tr>
+                <th>Название</th>
+                <th>Вид</th>
+                <th>Скульптор</th>
+                <th>Стиль</th>
+                <th>Местопложение</th>
+                <th>Материал</th>
+                <th>Год создания</th>
+                <th>Площадь</th>
+                <th>Высота</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var sculpture in Model)
+            {
+                <tr id="@sculpture.Id">
+                    <td>@sculpture.Name</td>
+                    <td>@sculpture.Type</td>
+                    <td>@sculpture.Sculptor.Name</td>
+                    <td>@sculpture.Style.StyleName</td>
+                    <td>@sculpture.Location.LocationName</td>
+                    <td>@sculpture.Material</td>
+                    <td>@sculpture.Year год</td>
+                    <td>@sculpture.Square м<sup>2</sup></td>
+                    <td>@sculpture.Height м</td>
+                    <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+
+@if (ViewBag.Checked != 0)
+{
+    <script>
+        var checkedNum = @ViewBag.Checked;
+        $("option[value=" + checkedNum + "]").attr("selected", true);
+    </script>
+}
+
+@if (ViewBag.Filters != null)
+{
+    foreach (var filter in ((List<int>)ViewBag.Filters))
+    {
+        <script>
+            var scriptFilter = @filter;
+            $("input[flag=" + scriptFilter + "]").attr("checked", true);
+        </script>
+    }
+}

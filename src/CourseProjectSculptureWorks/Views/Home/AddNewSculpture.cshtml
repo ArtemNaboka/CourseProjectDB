@@ -1,0 +1,103 @@
+﻿@using CourseProjectSculptureWorks.Models.ViewModels
+@using CourseProjectSculptureWorks.Data
+@model SculptureViewModel
+
+@inject ApplicationDbContext db
+
+@{
+    ViewData["Title"] = "Добавить скульптуры";
+}
+
+<form asp-controller="Home" asp-action="AddNewSculpture" method="post" class="form-horizontal">
+    <h4>Добавление скульптуры</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="Type" class="form-control">
+                @foreach(var type in Lists.SculptureTypes)
+                {
+                    <option>@type</option>
+                }
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="SculptorId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="SculptorId" class="form-control">
+                @foreach(var sculptor in db.Sculptors.ToList())
+                {
+                    <option value="@sculptor.SculptorId">@sculptor.Name</option>
+                }
+            </select>
+            <span asp-validation-for="SculptorId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StyleId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="StyleId" class="form-control">
+                @foreach (var style in db.Styles.ToList())
+                {
+                    <option value="@style.StyleId">@style.StyleName</option>
+                }
+            </select>
+            <span asp-validation-for="StyleId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LocationId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="LocationId" class="form-control">
+                @foreach (var location in db.Locations.ToList())
+                {
+                    <option value="@location.LocationId">@location.LocationName</option>
+                }
+            </select>
+            <span asp-validation-for="LocationId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Material" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Material" class="form-control" />
+            <span asp-validation-for="Material" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Year" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Square" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Square" class="form-control" />
+            <span asp-validation-for="Square" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Height" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Height" class="form-control" />
+            <span asp-validation-for="Height" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Добавить</button>
+        </div>
+    </div>
+</form>
