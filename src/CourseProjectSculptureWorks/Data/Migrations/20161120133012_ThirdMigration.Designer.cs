@@ -8,9 +8,10 @@ using CourseProjectSculptureWorks.Data;
 namespace CourseProjectSculptureWorks.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161120133012_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -67,8 +68,7 @@ namespace CourseProjectSculptureWorks.Data.Migrations
 
             modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.ExcursionType", b =>
                 {
-                    b.Property<int>("ExcursionTypeId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("NameOfType");
 
                     b.Property<int>("Discount");
 
@@ -76,10 +76,7 @@ namespace CourseProjectSculptureWorks.Data.Migrations
 
                     b.Property<int>("MinNumberOfPeople");
 
-                    b.Property<string>("NameOfType")
-                        .IsRequired();
-
-                    b.HasKey("ExcursionTypeId");
+                    b.HasKey("NameOfType");
 
                     b.ToTable("ExcursionTypes");
                 });

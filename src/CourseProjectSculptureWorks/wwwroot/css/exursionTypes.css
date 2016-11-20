@@ -1,25 +1,14 @@
-﻿.sculptorContainer
+﻿.column
 {
-    margin-top: 20px;
+    display:inline-table;
+    margin:30px 20px 20px 20px;
 }
 
-
-td, th
+a
 {
-    font-size:14px;
-    text-align:center;
+    cursor:pointer;
 }
 
-.column
-{
-    display: inline-table;
-    margin-top: 30px;
-}
-
-.features
-{
-    margin: 40px 50px 0 -30px;
-}
 
 a.addBtn {
   display: inline-block;
@@ -37,7 +26,7 @@ a.addBtn {
 a.addBtn:hover { background: rgba(255, 69, 0,.2); }
 a.addBtn:active { background: rgba(255, 69, 0,.2); }
 
-a
+.features
 {
-    cursor:pointer;
+    margin-left: -20px;
 }

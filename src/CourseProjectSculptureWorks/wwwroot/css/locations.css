@@ -6,12 +6,7 @@
 
 td
 {
-    border-color:black;
-    border:1px solid;
-    padding: 10px;
-    padding-left:15px;
-    padding-right:15px;
-    font-size:16px;
+    font-size:13px;
     text-align:center;
 }
 
@@ -30,3 +25,24 @@ table
 {
     margin: 40px 50px 0 -30px;
 }
+
+a
+{
+    cursor:pointer;
+}
+
+a.addBtn {
+  display: inline-block;
+  color: coral;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+  margin: 20px;
+} 
+a.addBtn:hover { background: rgba(255, 69, 0,.2); }
+a.addBtn:active { background: rgba(255, 69, 0,.2); }

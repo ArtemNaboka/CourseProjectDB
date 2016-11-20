@@ -1,0 +1,46 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model ExcursionType
+
+@{
+    ViewData["Title"] = "Добавить вид экскурсии";
+}
+
+<form asp-controller="Home" asp-action="AddNewExcursionType" method="post" class="form-horizontal">
+    <h4>Добавление вид экскурсии</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="NameOfType" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="NameOfType" class="form-control" />
+            <span asp-validation-for="NameOfType" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Discount" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Discount" class="form-control" />
+            <span asp-validation-for="Discount" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="MinNumberOfPeople" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="MinNumberOfPeople" class="form-control" />
+            <span asp-validation-for="MinNumberOfPeople" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxNumberOfPeople" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="MaxNumberOfPeople" class="form-control" />
+            <span asp-validation-for="MaxNumberOfPeople" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Добавить</button>
+        </div>
+    </div>
+</form>
+

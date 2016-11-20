@@ -6,6 +6,7 @@
 }
 
 <link rel="stylesheet" href="~/css/locations.css" />
+<link rel="stylesheet" href="~/css/tableStyles.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/locations.js"></script>
 
@@ -53,19 +54,19 @@
     </form>
 </div>
 <div class="column">
-    <a asp-action="AddNewLocation" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+    <a asp-action="AddNewLocation" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
     <div class="locationContainer">
         @if (Model != null && Model.Count != 0)
         {
-            <table id="styleTable">
+            <table class="simple-little-table" cellspacing='0' id="styleTable">
                 <tr style="background-color:aqua;">
-                    <td style="width:150px;"><b>Название</b></td>
-                    <td style="width:70px;"><b>Вид</b></td>
-                    <td style="width:150px;"><b>Адрес</b></td>
-                    <td style="width:130px;"><b>Цена экскурсии для одного человека</b></td>
-                    <td style="width:30px;"><b>Длительность экскурсии</b></td>
-                    <td style="width:50px;"></td>
-                    <td style="width:50px;"></td>
+                    <th style="width:150px;"><b>Название</b></th>
+                    <th style="width:70px;"><b>Вид</b></th>
+                    <th style="width:150px;"><b>Адрес</b></th>
+                    <th style="width:130px;"><b>Цена экскурсии для одного человека</b></th>
+                    <th style="width:20px;"><b>Длительность экскурсии</b></th>
+                    <th style="width:50px;"></th>
+                    <th style="width:50px;"></th>
                 </tr>
                 @foreach (var location in Model)
                 {
@@ -75,8 +76,8 @@
                         <td>@location.Country, @location.City,<br />@location.Address</td>
                         <td>@location.PriceForPerson UAN</td>
                         <td>@location.DurationOfExcursion мин</td>
-                        <td><a class="btn btn-info" title="Редактировать" asp-action="EditLocation" asp-route-locationId="@location.LocationId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a class="btn btn-danger del" locationId="@location.LocationId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation" asp-route-locationId="@location.LocationId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a style="color:crimson;" class="del" locationId="@location.LocationId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                 }
             </table>

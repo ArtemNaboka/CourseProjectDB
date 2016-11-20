@@ -242,6 +242,10 @@ C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161117205405_TryMigration.Designer.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161117211530_LastLocationMigration.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161117211530_LastLocationMigration.Designer.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161120133012_ThirdMigration.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161120133012_ThirdMigration.Designer.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161120153026_FifthMigration.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\20161120153026_FifthMigration.Designer.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\ApplicationDbContextModelSnapshot.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ApplicationUser.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Lists.cs
@@ -252,6 +256,7 @@ C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\AccountViewModels\ResetPasswordViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\AccountViewModels\SendCodeViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\AccountViewModels\VerifyCodeViewModel.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\ExcursionType.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Location.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Sculptor.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Sculpture.cs

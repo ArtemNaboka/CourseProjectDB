@@ -1,0 +1,70 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<ExcursionType>
+
+@{
+    ViewData["Title"] = "Виды экскурсий";
+}
+
+<link rel="stylesheet" href="~/css/exursionTypes.css" />
+<link rel="stylesheet" href="~/css/tableStyles.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/excursionTypes.js"></script>
+
+
+<div class="features column">
+    <form method="get" class="form-horizontal">
+        <input class="form-control" name="searchString" type="text" placeholder="Название вида..." value="@ViewBag.SearchString" />
+        <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
+        <div>
+            <h4>
+                Сортировка
+            </h4>
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="1">По скидке</label>
+            </div>
+
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="2">По минимальному кол-ву человек</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="sortNum" value="2">По максимальному кол-ву человек</label>
+            </div>
+            <input style="width:100%; margin-top:5px;" type="submit" value="Сортировать" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<div class="column">
+    <a asp-action="AddNewExcursionType" class="addBtn">Добавить вид экскурсии</a>
+    @if (Model != null && Model.Count != 0)
+    {
+        <table class="simple-little-table" cellspacing='0' id="excursionTypeTable">
+            <tr>
+                <th>Название вида</th>
+                <th>Скидка</th>
+                <th style="width:200px;">Минимальное кол-во человек</th>
+                <th style="width:200px;">Максимальное кол-во человек</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var excursionType in Model)
+            {
+                <tr id="@excursionType.ExcursionTypeId">
+                    <td>@excursionType.NameOfType</td>
+                    <td>@excursionType.Discount %</td>
+                    <td>@excursionType.MinNumberOfPeople чел</td>
+                    <td>@excursionType.MaxNumberOfPeople чел</td>
+                    <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditExcursionType" asp-route-excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a title="Удалить" style="color:crimson;" class="del" excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-trash"></span></a></td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <br />
+        <h3 style="margin-left:20px;">В базе данных отсутствует искомая информация о видах экскурсий...</h3>
+    }
+</div>

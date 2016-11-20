@@ -3,14 +3,25 @@
     margin-top: 10px;
 }
 
-td
+a.addBtn {
+  display: inline-block;
+  color: coral;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+  margin: 20px;
+} 
+a.addBtn:hover { background: rgba(255, 69, 0,.2); }
+a.addBtn:active { background: rgba(255, 69, 0,.2); }
+
+a
 {
-    border-color:black;
-    border:1px solid;
-    padding: 10px;
-    padding-right:30px;
-    font-size:16px;
-    text-align:center;
+    cursor:pointer;
 }
 
 .column
@@ -21,7 +32,7 @@ td
 
 .features
 {
-    margin:50px 100px 0 -50px;
+    margin:50px 100px 0 0px;
 }
 
 .mainPart
@@ -29,4 +40,9 @@ td
     margin-top: -800px;
 }
 
+
+th, td
+{
+    font-size:14px;
+}
 

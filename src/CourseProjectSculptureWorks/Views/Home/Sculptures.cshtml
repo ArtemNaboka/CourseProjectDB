@@ -10,6 +10,7 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/sculptures.js"></script>
 
+
 <a asp-action="AddNewSculpture" class="addBtn">Добавить скульптуру</a>
 <div class="features">
     <form asp-action="Sculptures" method="get">
@@ -79,6 +80,10 @@
                 </tr>
             }
         </table>
+    }
+    else
+    {
+        <h3>В базе данных отсутствует искомая информация о скульптурах...</h3>
     }
 </div>
 

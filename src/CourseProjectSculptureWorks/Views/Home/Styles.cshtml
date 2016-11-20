@@ -5,9 +5,11 @@
     ViewData["Title"] = "Стили";
 }
 
+<link rel="stylesheet" href="~/css/tableStyles.css" />
 <link rel="stylesheet" href="~/css/styles.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/styles.js"></script>
+
 
 <div class="column features">
     <form method="get" class="form-horizontal">
@@ -48,17 +50,17 @@
 </div>
 
 <div class="column mainPart">
-    <a asp-action="CreateNewStyle" class="btn btn-success addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить стиль</a>
+    <a asp-action="CreateNewStyle" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить стиль</a>
     <div class="styleContainer">
         @if (Model != null && Model.Count != 0)
         {
-            <table id="styleTable">
+            <table id="styleTable" class="simple-little-table" cellspacing='0'>
                 <tr style="background-color:aqua;">
-                    <td><b>Название стиля</b></td>
-                    <td><b>Эпоха возникновения</b></td>
-                    <td><b>Страна</b></td>
-                    <td></td>
-                    <td></td>
+                    <th><b>Название стиля</b></th>
+                    <th><b>Эпоха возникновения</b></th>
+                    <th><b>Страна</b></th>
+                    <th></th>
+                    <th></th>
                 </tr>
 
                 @foreach (var style in Model)
@@ -67,8 +69,8 @@
                         <td>@style.StyleName</td>
                         <td>@style.Era</td>
                         <td>@style.Country</td>
-                        <td><a class="btn btn-info" title="Редактировать" asp-action="EditStyle" asp-route-styleId="@style.StyleId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a class="btn btn-danger del" styleId="@style.StyleId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td><a title="Редактировать"  style="color:cornflowerblue;" asp-action="EditStyle" asp-route-styleId="@style.StyleId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a class="del" style="color:crimson;" styleId="@style.StyleId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                 }
             </table>

@@ -509,19 +509,79 @@ namespace CourseProjectSculptureWorks.Controllers
 
         #endregion
 
+        #region ExcursionTypesController
+
+        // Добавить фильтр, сорт и поиск
+        public async Task<IActionResult> ExcursionTypes()
+        {
+            return View(await _db.ExcursionTypes.ToListAsync());
+        }
+
+        [HttpGet]
+        public IActionResult AddNewExcursionType()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewExcursionType(ExcursionType excursionType)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.ExcursionTypes.Add(excursionType);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(ExcursionTypes));
+            }
+            return View(excursionType);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditExcursionType(int? excursionTypeId)
+        {
+            if (excursionTypeId == null)
+                return NotFound();
+            var excursionType = await _db.ExcursionTypes.SingleAsync(et => et.ExcursionTypeId == excursionTypeId);
+            return View(excursionType);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditExcursionType(ExcursionType excursionType)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.ExcursionTypes.Update(excursionType);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(ExcursionTypes));
+            }
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<bool> DeleteExcursionType(IntegerModel model)
+        {
+            var excursionType = _db.ExcursionTypes.Single(s => s.ExcursionTypeId == model.Integer);
+            _db.ExcursionTypes.Remove(excursionType);
+            await _db.SaveChangesAsync();
+            return _db.ExcursionTypes != null && _db.ExcursionTypes.Count() != 0;
+        }
+
+        #endregion
 
         #region Statistics
 
-        public IActionResult NumberOfSculpturesForCertainTime()
-        {
-            var year = 1000;
-            int yearOfStart = DateTime.Now.Year - year;
-            var styles = _db.Sculptures.Include(s => s.Sculptor)
-                .Include(s => s.Style)
-                .Include(s => s.Location)
-                .ToListAsync();
-            var union = _db.Sculptures.Join(_db.Sculptors, s => s.Sculptor.SculptorId, s => s.SculptorId, new { });
-        }
+        //public IActionResult NumberOfSculpturesForCertainTime()
+        //{
+        //    var year = 1000;
+        //    int yearOfStart = DateTime.Now.Year - year;
+        //    var styles = _db.Sculptures.Include(s => s.Sculptor)
+        //        .Include(s => s.Style)
+        //        .Include(s => s.Location)
+        //        .ToListAsync();
+        //    var union = _db.Sculptures.Join(_db.Sculptors, s => s.Sculptor.SculptorId, s => s.SculptorId, new { });
+        //}
 
         #endregion
 
