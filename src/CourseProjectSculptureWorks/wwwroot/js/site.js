@@ -1,1 +1,3 @@
-﻿// Write your Javascript code.
+﻿$("#firstStat").click(function () {
+    $("#myModalBox").modal('show');
+});

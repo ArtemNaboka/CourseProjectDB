@@ -17,6 +17,7 @@ namespace CourseProjectSculptureWorks.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<ExcursionType> ExcursionTypes { get; set; }
         public DbSet<Excursion> Excursion { get; set; }
+        public DbSet<Composition> Compositions { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -25,10 +26,20 @@ namespace CourseProjectSculptureWorks.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Composition>()
+                .HasKey(c => new { c.LocationId, c.ExcursionId });
+
+            builder.Entity<Composition>()
+                .HasOne(c => c.Location)
+                .WithMany(l => l.Compositions)
+                .HasForeignKey(c => c.LocationId);
+
+            builder.Entity<Composition>()
+                .HasOne(c => c.Excursion)
+                .WithMany(e => e.Compositions)
+                .HasForeignKey(c => c.ExcursionId);
+
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
 }

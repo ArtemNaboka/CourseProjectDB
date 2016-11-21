@@ -47,5 +47,6 @@ namespace CourseProjectSculptureWorks.Models.Entities
         public decimal PriceForPerson { get; set; }
 
         public virtual List<Sculpture> Sculptures { get; set; }
+        public virtual List<Composition> Compositions { get; set; }
     }
 }

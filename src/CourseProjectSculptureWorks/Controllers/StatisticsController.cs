@@ -19,10 +19,12 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NumberOfSculpturesForCertainTime(int year = 1000)
+        public async Task<IActionResult> NumberOfSculpturesForCertainTime(int? year)
         {
-            int yearOfStart = DateTime.Now.Year - year;
-            ViewBag.Year = year;
+            if(year == null)
+                return NotFound();
+            int yearOfStart = DateTime.Now.Year - year.Value;
+            ViewBag.Year = year.Value;
             var sculptures = await _db.Sculptures.Include(s => s.Sculptor)
                 .Include(s => s.Style)
                 .Include(s => s.Location)

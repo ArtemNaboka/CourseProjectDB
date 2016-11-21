@@ -19,5 +19,6 @@ namespace CourseProjectSculptureWorks.Models.Entities
         public string Subjects { get; set; }
 
         public virtual ExcursionType ExcursionType { get; set; }
+        public virtual List<Composition> Compositions { get; set; }
     }
 }

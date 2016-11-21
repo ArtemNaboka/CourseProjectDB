@@ -13,19 +13,19 @@
         <tr><th colspan="5">Количество скульптур за @ViewBag.Year лет</th></tr>
         <tr>
             <td>
-                Название скульптуры
+                <b>Название скульптуры</b>
             </td>
             <td>
-                Автор
+               <b>Автор</b>
             </td>
             <td>
-                Стиль
+                <b>Стиль</b>
             </td>
             <td>
-                Страна
+                <b>Страна</b>
             </td>
             <td>
-                Год
+                <b>Год</b>
             </td>
         </tr>
         @foreach (var statisticLine in Model)
@@ -40,7 +40,7 @@
         }
         <tr>
             <td><b>Итого</b></td>
-            <td colspan="4"><b>@Model.Count скульптур за @ViewBag.Year лет</b></td>
+            <td colspan="4"><b>Количество скульптур за @ViewBag.Year лет: @Model.Count</b></td>
         </tr>
     </table>
     <br /><br />
