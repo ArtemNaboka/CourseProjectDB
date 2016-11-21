@@ -9,6 +9,7 @@ using CourseProjectSculptureWorks.Models.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using CourseProjectSculptureWorks.Models.StatisticsViewModels;
 
 namespace CourseProjectSculptureWorks.Controllers
 {
@@ -510,6 +511,14 @@ namespace CourseProjectSculptureWorks.Controllers
             return View(await _db.Excursion.ToListAsync());
         }
 
+
+        [HttpGet]
+        public IActionResult AddNewExcursion()
+        {
+            return View();
+        }
+
+
         #endregion
 
         #region ExcursionTypesController
@@ -596,21 +605,6 @@ namespace CourseProjectSculptureWorks.Controllers
             await _db.SaveChangesAsync();
             return _db.ExcursionTypes != null && _db.ExcursionTypes.Count() != 0;
         }
-
-        #endregion
-
-        #region Statistics
-
-        //public IActionResult NumberOfSculpturesForCertainTime()
-        //{
-        //    var year = 1000;
-        //    int yearOfStart = DateTime.Now.Year - year;
-        //    var styles = _db.Sculptures.Include(s => s.Sculptor)
-        //        .Include(s => s.Style)
-        //        .Include(s => s.Location)
-        //        .ToListAsync();
-        //    var union = _db.Sculptures.Join(_db.Sculptors, s => s.Sculptor.SculptorId, s => s.SculptorId, new { });
-        //}
 
         #endregion
 

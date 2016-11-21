@@ -1,0 +1,86 @@
+﻿@using CourseProjectSculptureWorks.Models.StatisticsViewModels
+@model List<NumberOfSculpturesForCertainTimeViewModel>
+
+@{ 
+    ViewData["Title"] = String.Format("Количество скульптур за последние {0} лет", ViewBag.Year);
+}
+
+
+
+@if (Model != null && Model.Count != 0)
+{
+    <table>
+        <tr><th colspan="5">Количество скульптур за @ViewBag.Year лет</th></tr>
+        <tr>
+            <td>
+                Название скульптуры
+            </td>
+            <td>
+                Автор
+            </td>
+            <td>
+                Стиль
+            </td>
+            <td>
+                Страна
+            </td>
+            <td>
+                Год
+            </td>
+        </tr>
+        @foreach (var statisticLine in Model)
+        {
+            <tr>
+                <td>@statisticLine.SculptureName</td>
+                <td>@statisticLine.SculptorName</td>
+                <td>@statisticLine.StyleName</td>
+                <td>@statisticLine.Country</td>
+                <td>@statisticLine.YearOfCreation</td>
+            </tr>
+        }
+        <tr>
+            <td><b>Итого</b></td>
+            <td colspan="4"><b>@Model.Count скульптур за @ViewBag.Year лет</b></td>
+        </tr>
+    </table>
+    <br /><br />
+
+}
+else
+{
+    <h3>За данный промежуток времени не была внесена в ИС ни одна скульптура</h3>
+}
+
+
+
+<style>
+    table {
+        width:100%;
+        margin-top:3%;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        text-align: center;
+        border-collapse: collapse;
+        border-spacing: 5px;
+        background: #E1E3E0;
+        border-radius: 20px;
+    }
+    th {
+        font-size: 22px;
+        font-weight: 300;
+        padding: 12px 10px;
+        border-bottom: 2px solid #F56433;
+        color: #F56433;
+    }
+    tbody tr:nth-child(2) {
+        border-bottom: 2px solid #F56433;
+    }
+    tbody tr:last-child {
+        border-top: 2px solid #F56433;
+        border-bottom: 2px solid #F56433;
+    }
+    td {
+        padding: 20px;
+        color: #8D8173;
+    }
+
+</style>

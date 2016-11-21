@@ -229,6 +229,7 @@ C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Controllers\AccountController.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Controllers\HomeController.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Controllers\ManageController.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Controllers\StatisticsController.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\ApplicationDbContext.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\00000000000000_CreateIdentitySchema.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs
@@ -273,6 +274,7 @@ C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\RemoveLoginViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\SetPasswordViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\VerifyPhoneNumberViewModel.cs
+C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\StatisticsViewModels\NumberOfSculpturesForCertainTimeViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\IntegerModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\SculptureViewModel.cs
 C:\Users\ПК\documents\visual studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Services\IEmailSender.cs
