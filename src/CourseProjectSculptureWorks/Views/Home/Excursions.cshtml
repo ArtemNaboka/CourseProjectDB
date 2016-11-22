@@ -1,0 +1,54 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Excursion>
+
+@{
+    ViewData["Title"] = "Экскурсии";
+}
+
+<link rel="stylesheet" href="~/css/tableStyles.css" />
+<link rel="stylesheet" href="~/css/excursions.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<div class="column features">
+    <form method="get" class="form-horizontal">
+
+    </form>
+</div>
+<div class="column">
+    <a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+    <div class="locationContainer">
+        @if (Model != null && Model.Count != 0)
+        {
+            <table class="simple-little-table" cellspacing='0' id="styleTable">
+                <tr style="background-color:aqua;">
+                    <th style="width:150px;"><b>Название</b></th>
+                    <th style="width:70px;"><b>Вид</b></th>
+                    <th style="width:150px;"><b>Адрес</b></th>
+                    <th style="width:130px;"><b>Цена экскурсии для одного человека</b></th>
+                    <th style="width:20px;"><b>Длительность экскурсии</b></th>
+                    <th style="width:50px;"></th>
+                    <th style="width:50px;"></th>
+                </tr>
+                @foreach (var excursion in Model)
+                {
+                    <tr id="">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a style="color:crimson;" class="del" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h3>В базе данных отсутствует искомая информация о экскурсиях...</h3>
+        }
+    </div>
+</div>
+
+
+

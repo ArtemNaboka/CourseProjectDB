@@ -40,6 +40,7 @@
                             <li class="divider"></li>
                             <li><a asp-action="Locations" asp-controller="Home">Местоположения</a></li>
                             <li class="divider"></li>
+                            <li><a asp-controller="Home" asp-action="Excursions">Экскурсии</a></li>
                             <li><a asp-controller="Home" asp-action="ExcursionTypes">Виды экскурсий</a></li>
                         </ul>
                     </li>
@@ -47,6 +48,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Статистика<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#" id="firstStat">Количество скульптур за определенное время</a></li>
+                            <li><a asp-controller="Statistics" asp-action="StylesPopularity">Популярность стилей скульптуры</a></li>
                         </ul>
                     </li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">Справка</a></li>
@@ -55,6 +57,7 @@
             </div>
         </div>
     </div>
+    
     <div id="myModalBox" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -73,6 +76,7 @@
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />

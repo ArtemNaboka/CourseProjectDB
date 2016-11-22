@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-CourseProjectSculptureWorks-46ef43b1-4c43-4085-af23-97b5db18807a",
 
   "dependencies": {
@@ -42,8 +42,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
-  },
+    },
+    "Microsoft.EntityFrameworkCore": "1.0.0" },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

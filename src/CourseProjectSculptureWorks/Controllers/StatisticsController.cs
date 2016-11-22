@@ -37,8 +37,22 @@ namespace CourseProjectSculptureWorks.Controllers
                                         StyleName = s.Style.StyleName,
                                         Country = s.Location.Country,
                                         YearOfCreation = s.Year
-                                    }).ToList();
+                                    }).OrderBy(n => n.YearOfCreation).ToList();
             return View(statisticList);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> StylesPopularity()
+        {
+            var styles = await _db.Styles.Include(s => s.Sculptures).ToListAsync();
+            var statisticList = styles.Select(s => new StylePopularityViewModel
+                                        {
+                                            StyleName = s.StyleName,
+                                            NumberOfSculpture = s.Sculptures.Count
+                                        })
+                                       .GroupBy(s => s.StyleName).ToList();
+            return View(statisticList);                                    
         }
     }
 }

@@ -508,7 +508,7 @@ namespace CourseProjectSculptureWorks.Controllers
 
         public async Task<IActionResult> Excursions()
         {
-            return View(await _db.Excursion.ToListAsync());
+            return View(await _db.Excursions.ToListAsync());
         }
 
 
@@ -518,6 +518,38 @@ namespace CourseProjectSculptureWorks.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddNewExcursion(ExcursionViewModel model, int[] location)
+        {
+            if(ModelState.IsValid)
+            {
+                var locations = new List<Location>();
+                foreach(var location_id in location)
+                    locations.Add(_db.Locations.Single(l => l.LocationId == location_id));
+                var excursionType = _db.ExcursionTypes.Single(e => e.ExcursionTypeId == model.ExcursionTypeId);
+                _db.Excursions.Add(new Excursion
+                {
+                    Subjects = model.Subjects,
+                    DateOfExcursion = model.DateOfExcursion,
+                    ExcursionType = excursionType,
+                    NumberOfPeople = model.NumberOfPeople,
+                    PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount)                   
+                });
+                _db.SaveChanges();
+                foreach (var location_id in location)
+                {
+                    _db.Compositions.Add(new Composition
+                    {
+                        ExcursionId = _db.Excursions.Last().ExcursionId,
+                        LocationId = location_id,
+                        Excursion = _db.Excursions.Single(e => e.ExcursionId == _db.Excursions.Last().ExcursionId),
+                        Location = _db.Locations.Single(l => l.LocationId == location_id)
+                    });
+                }
+                _db.SaveChanges();
+            }
+            return View(model);
+        }
 
         #endregion
 

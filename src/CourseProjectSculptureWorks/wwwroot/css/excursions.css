@@ -1,0 +1,32 @@
+﻿.column
+{
+    display:inline-table;
+    margin:30px 20px 20px 20px;
+}
+
+a
+{
+    cursor:pointer;
+}
+
+
+a.addBtn {
+  display: inline-block;
+  color: coral;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+  margin: 20px;
+} 
+a.addBtn:hover { background: rgba(255, 69, 0,.2); }
+a.addBtn:active { background: rgba(255, 69, 0,.2); }
+
+.features
+{
+    margin-left: -20px;
+}

@@ -1,0 +1,72 @@
+﻿@using CourseProjectSculptureWorks.Models.StatisticsViewModels
+@model List<IGrouping<string, StylePopularityViewModel>>
+
+@{
+    ViewData["Title"] = "WTF";
+}
+
+
+
+@if (Model != null && Model.Count != 0)
+{
+    <table>
+        <tr><th colspan="5">Популярность стилей скульптуры</th></tr>
+        <tr>
+            <td>
+                <b>Название стиля</b>
+            </td>
+            <td>
+                <b>Количество скульптур</b>
+            </td>
+        </tr>
+        @foreach (var statisticLine in Model)
+        {
+            <tr>
+                <td>@statisticLine.Key</td>
+                @foreach(var num_column in statisticLine)
+                {
+                    <td>@num_column.NumberOfSculpture</td>
+                }
+            </tr>
+        }
+    </table>
+    <br /><br />
+
+}
+else
+{
+    <h3>За данный промежуток времени не была внесена в ИС ни одна скульптура</h3>
+}
+
+
+
+<style>
+    table {
+        width: 100%;
+        margin-top: 3%;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        text-align: center;
+        border-collapse: collapse;
+        border-spacing: 5px;
+        background: #E1E3E0;
+        border-radius: 20px;
+    }
+
+    th {
+        font-size: 22px;
+        font-weight: 300;
+        padding: 12px 10px;
+        border-bottom: 2px solid #F56433;
+        color: #F56433;
+    }
+
+    tbody tr:nth-child(2) {
+        border-bottom: 2px solid #F56433;
+    }
+
+
+    td {
+        padding: 20px;
+        color: #8D8173;
+    }
+</style>
