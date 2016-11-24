@@ -1,5 +1,8 @@
 ﻿@using CourseProjectSculptureWorks.Models.Entities
+@using CourseProjectSculptureWorks.Data
 @model List<Excursion>
+
+@inject ApplicationDbContext db
 
 @{
     ViewData["Title"] = "Экскурсии";
@@ -21,22 +24,32 @@
         {
             <table class="simple-little-table" cellspacing='0' id="styleTable">
                 <tr style="background-color:aqua;">
-                    <th style="width:150px;"><b>Название</b></th>
-                    <th style="width:70px;"><b>Вид</b></th>
-                    <th style="width:150px;"><b>Адрес</b></th>
-                    <th style="width:130px;"><b>Цена экскурсии для одного человека</b></th>
-                    <th style="width:20px;"><b>Длительность экскурсии</b></th>
+                    <th><b>Тематика</b></th>
+                    <th><b>Вид экскурсии</b></th>
+                    <th><b>Местоположения</b></th>
+                    <th><b>Количество человек</b></th>
+                    <th><b>Цена экскурсии</b></th>
                     <th style="width:50px;"></th>
                     <th style="width:50px;"></th>
                 </tr>
                 @foreach (var excursion in Model)
                 {
+                    var locations = new List<Location>();
+                    foreach (var composition in excursion.Compositions)
+                    {
+                        locations.Add(db.Locations.Single(l => l.LocationId == composition.LocationId));
+                    }
                     <tr id="">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>@excursion.Subjects</td>
+                        <td>@excursion.ExcursionType.NameOfType</td>
+                        <td>
+                            @foreach(var location in locations)
+                            {
+                                <p>@location.LocationName</p>
+                            }
+                        </td>
+                        <td>@excursion.NumberOfPeople</td>
+                        <td>@excursion.PriceOfExcursion</td>
                         <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td><a style="color:crimson;" class="del" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
@@ -45,7 +58,7 @@
         }
         else
         {
-            <h3>В базе данных отсутствует искомая информация о экскурсиях...</h3>
+            <h3 style="margin-left:20px;">В базе данных отсутствует искомая информация о экскурсиях...</h3>
         }
     </div>
 </div>

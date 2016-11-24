@@ -12,10 +12,22 @@
 
 
 <a asp-action="AddNewSculpture" class="addBtn"><span class="glyphicon glyphicon-plus"></span>   Добавить скульптуру</a>
+<a asp-action="Sculptures" class="btn btn-success">Показать все</a>
 <div class="features">
     <form asp-action="Sculptures" method="get">
         <div class="column">
             <h4 style="margin-left:60px;">Поиск</h4>
+            <select name="searchCriteria" class="form-control" style="margin-bottom:5px;">
+                <option criteria="0" value="0">По всем параметрам</option>
+                <option criteria="1" value="1">По названию</option>
+                <option criteria="2" value="2">По скульптору</option>
+                <option criteria="3" value="3">По стилю</option>
+                <option criteria="4" value="4">По местоположению</option>
+                <option criteria="5" value="5">По материалу</option>
+                <option criteria="6" value="6">По году создания</option>
+                <option criteria="7" value="7">По площади</option>
+                <option criteria="8" value="8">По высоте</option>
+            </select>
             <input name="searchString" value="@ViewBag.SearchString" type="text" class="form-control" placeholder="Название, стиль..." /><br />
             <input style="width:100%;" type="submit" class="btn btn-info" value="Найти" />
         </div>
@@ -68,9 +80,9 @@
                 <tr id="@sculpture.Id">
                     <td>@sculpture.Name</td>
                     <td>@sculpture.Type</td>
-                    <td>@sculpture.Sculptor.Name</td>
-                    <td>@sculpture.Style.StyleName</td>
-                    <td>@sculpture.Location.LocationName</td>
+                    <td><a style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
+                    <td><a style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
+                    <td><a style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
                     <td>@sculpture.Material</td>
                     <td>@sculpture.Year год</td>
                     <td>@sculpture.Square м<sup>2</sup></td>
@@ -106,4 +118,12 @@
             $("input[flag=" + scriptFilter + "]").attr("checked", true);
         </script>
     }
+}
+
+@if(ViewBag.SearchCriteria != null)
+{
+    <script>
+        var criteria = @ViewBag.SearchCriteria;
+        $("option[criteria=" + criteria + "]").attr("selected", "true");
+    </script>
 }

@@ -25,7 +25,8 @@ namespace CourseProjectSculptureWorks.Controllers
 
         #region SculptureController
         [HttpGet]
-        public async Task<IActionResult> Sculptures(string searchString = null, int sortNum = 0, string[] boxFilter = null)
+        public async Task<IActionResult> Sculptures(int searchCriteria, string searchString = null,
+            int sortNum = 0, string[] boxFilter = null)
         {
             var searchedSculptures = await _db.Sculptures.Include(s => s.Sculptor)
                 .Include(s => s.Style)
@@ -33,15 +34,35 @@ namespace CourseProjectSculptureWorks.Controllers
                 .ToListAsync();
             if (searchString != null && searchString != String.Empty)
             {
-                searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
-                    || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                if (searchCriteria == 0)
+                {
+                    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                        || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                }
+                else if (searchCriteria == 1)
+                    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 2)
+                    searchedSculptures = searchedSculptures.Where(s => s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 3)
+                    searchedSculptures = searchedSculptures.Where(s => s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 4)
+                    searchedSculptures = searchedSculptures.Where(s => s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 5)
+                    searchedSculptures = searchedSculptures.Where(s => s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 6)
+                    searchedSculptures = searchedSculptures.Where(s => s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 7)
+                    searchedSculptures = searchedSculptures.Where(s => s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                else if (searchCriteria == 8)
+                    searchedSculptures = searchedSculptures.Where(s => s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 ViewBag.SearchString = searchString;
+                ViewBag.SearchCriteria = searchCriteria;
             }
             if (sortNum != 0)
             {
@@ -508,7 +529,10 @@ namespace CourseProjectSculptureWorks.Controllers
 
         public async Task<IActionResult> Excursions()
         {
-            return View(await _db.Excursions.ToListAsync());
+            return View(await _db.Excursions
+                .Include(e => e.ExcursionType)
+                .Include(e => e.Compositions)
+                .ToListAsync());
         }
 
 
@@ -527,28 +551,56 @@ namespace CourseProjectSculptureWorks.Controllers
                 foreach(var location_id in location)
                     locations.Add(_db.Locations.Single(l => l.LocationId == location_id));
                 var excursionType = _db.ExcursionTypes.Single(e => e.ExcursionTypeId == model.ExcursionTypeId);
-                _db.Excursions.Add(new Excursion
+                var excursion = new Excursion
                 {
                     Subjects = model.Subjects,
                     DateOfExcursion = model.DateOfExcursion,
                     ExcursionType = excursionType,
                     NumberOfPeople = model.NumberOfPeople,
-                    PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount)                   
-                });
+                    PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount / 100)
+                };
+                _db.Excursions.Add(excursion);
+                //_db.Excursions.Add(new Excursion
+                //{
+                //    Subjects = model.Subjects,
+                //    DateOfExcursion = model.DateOfExcursion,
+                //    ExcursionType = excursionType,
+                //    NumberOfPeople = model.NumberOfPeople,
+                //    PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount/100)                   
+                //});
                 _db.SaveChanges();
+                
                 foreach (var location_id in location)
                 {
                     _db.Compositions.Add(new Composition
                     {
-                        ExcursionId = _db.Excursions.Last().ExcursionId,
+                        ExcursionId = excursion.ExcursionId, //_db.Excursions.Last().ExcursionId,
                         LocationId = location_id,
-                        Excursion = _db.Excursions.Single(e => e.ExcursionId == _db.Excursions.Last().ExcursionId),
+                        Excursion = excursion, //_db.Excursions.Single(e => e.ExcursionId == _db.Excursions.Last().ExcursionId),
                         Location = _db.Locations.Single(l => l.LocationId == location_id)
                     });
                 }
                 _db.SaveChanges();
+                return RedirectToAction(nameof(Excursions));
             }
             return View(model);
+        }
+
+
+        public IActionResult EditExcursion(int? excursionId)
+        {
+            if (excursionId == null)
+                return NotFound();
+            var excursion = _db.Excursions.Single(e => e.ExcursionId == excursionId);
+            var locationsId = _db.Compositions.Where(c => c.ExcursionId == excursionId).Select(c => c.LocationId);
+            return View(excursion);
+        }
+
+
+
+        public IActionResult EditExcursion(ExcursionViewModel model, int[] location)
+        {
+            throw new Exception();
         }
 
         #endregion
