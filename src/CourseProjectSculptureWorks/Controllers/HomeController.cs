@@ -542,8 +542,108 @@ namespace CourseProjectSculptureWorks.Controllers
             return View();
         }
 
+
         [HttpPost]
-        public IActionResult AddNewExcursion(ExcursionViewModel model, int[] location)
+        public async Task<IActionResult> AddNewExcursion(ExcursionViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var excursionType = await _db.ExcursionTypes.SingleAsync(e => e.ExcursionTypeId == model.ExcursionTypeId);
+                var locationPrice = _db.Locations.Single(l => l.LocationId == model.LocationId).PriceForPerson;
+                var excursion = new Excursion
+                {
+                    Subjects = model.Subjects,
+                    DateOfExcursion = model.DateOfExcursion,
+                    ExcursionType = excursionType,
+                    NumberOfPeople = model.NumberOfPeople,
+                    PriceOfExcursion = locationPrice * model.NumberOfPeople * (1 - excursionType.Discount / 100)                 
+                };
+                _db.Excursions.Add(excursion);
+                await _db.SaveChangesAsync();
+                _db.Compositions.Add(new Composition
+                {
+                    ExcursionId = excursion.ExcursionId,
+                    LocationId = model.LocationId,
+                    Excursion = excursion,
+                    Location = await _db.Locations.SingleAsync(l => l.LocationId == model.LocationId)
+                });
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Excursions));
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditExcursion(int? excursionId)
+        {
+            if (excursionId == null)
+                return NotFound();
+            var excursion = await _db.Excursions.Include(e => e.ExcursionType).SingleAsync(e => e.ExcursionId == excursionId);
+            var model = new ExcursionViewModel
+            {
+                ExcursionId = excursion.ExcursionId,
+                DateOfExcursion = excursion.DateOfExcursion,
+                ExcursionTypeId = excursion.ExcursionType.ExcursionTypeId,
+                Subjects = excursion.Subjects,
+                NumberOfPeople = excursion.NumberOfPeople,
+                LocationId = _db.Compositions.Single(c => c.ExcursionId == excursionId).LocationId
+            };
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditExcursion(ExcursionViewModel model, int oldLocation)
+        {
+            if(ModelState.IsValid)
+            {
+                var excursionType = await _db.ExcursionTypes.SingleAsync(e => e.ExcursionTypeId == model.ExcursionTypeId);
+                var locationPrice = _db.Locations.Single(l => l.LocationId == model.LocationId).PriceForPerson;
+                var excursion = _db.Excursions.Single(e => e.ExcursionId == model.ExcursionId);
+                excursion.Subjects = model.Subjects;
+                excursion.DateOfExcursion = model.DateOfExcursion;
+                excursion.ExcursionType = excursionType;
+                excursion.NumberOfPeople = model.NumberOfPeople;
+                excursion.PriceOfExcursion = locationPrice * model.NumberOfPeople * (1 - excursionType.Discount / 100);
+                _db.Excursions.Update(excursion);
+                await _db.SaveChangesAsync();
+                //_db.Compositions.Single(c => c.LocationId == oldLocation && c.ExcursionId == model.ExcursionId).LocationId = model.LocationId;
+                var composition = await _db.Compositions.SingleAsync(c => c.LocationId == oldLocation && c.ExcursionId == model.ExcursionId);
+                _db.Compositions.Remove(composition);
+                _db.Compositions.Add(new Composition
+                {
+                    LocationId = model.LocationId,
+                    ExcursionId = model.ExcursionId,
+                    Location = await _db.Locations.SingleAsync(l => l.LocationId == model.LocationId),
+                    Excursion = await _db.Excursions.SingleAsync(e => e.ExcursionId == model.ExcursionId)
+                });
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Excursions));
+            }
+            return View(model);
+        }
+
+
+        public async Task<bool> DeleteExcursion(IntegerModel model)
+        {
+            var excursion = await _db.Excursions.SingleAsync(e => e.ExcursionId == model.Integer);
+            var compositions = _db.Compositions.Where(e => e.ExcursionId == excursion.ExcursionId);
+            _db.Excursions.Remove(excursion);
+            foreach (var composiition in compositions)
+                _db.Compositions.Remove(composiition);
+            await _db.SaveChangesAsync();
+            return _db.Excursions != null && _db.Excursions.Count() != 0;
+        }
+
+
+        [HttpGet]
+        public IActionResult AddNewExcursions()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddNewExcursions(ExcursionsViewModel model, int[] location)
         {
             if(ModelState.IsValid)
             {
@@ -560,23 +660,15 @@ namespace CourseProjectSculptureWorks.Controllers
                     PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount / 100)
                 };
                 _db.Excursions.Add(excursion);
-                //_db.Excursions.Add(new Excursion
-                //{
-                //    Subjects = model.Subjects,
-                //    DateOfExcursion = model.DateOfExcursion,
-                //    ExcursionType = excursionType,
-                //    NumberOfPeople = model.NumberOfPeople,
-                //    PriceOfExcursion = locations.Select(l => l.PriceForPerson).Sum() * model.NumberOfPeople * (1 - excursionType.Discount/100)                   
-                //});
                 _db.SaveChanges();
                 
                 foreach (var location_id in location)
                 {
                     _db.Compositions.Add(new Composition
                     {
-                        ExcursionId = excursion.ExcursionId, //_db.Excursions.Last().ExcursionId,
+                        ExcursionId = excursion.ExcursionId,
                         LocationId = location_id,
-                        Excursion = excursion, //_db.Excursions.Single(e => e.ExcursionId == _db.Excursions.Last().ExcursionId),
+                        Excursion = excursion,
                         Location = _db.Locations.Single(l => l.LocationId == location_id)
                     });
                 }
@@ -587,21 +679,6 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
 
-        public IActionResult EditExcursion(int? excursionId)
-        {
-            if (excursionId == null)
-                return NotFound();
-            var excursion = _db.Excursions.Single(e => e.ExcursionId == excursionId);
-            var locationsId = _db.Compositions.Where(c => c.ExcursionId == excursionId).Select(c => c.LocationId);
-            return View(excursion);
-        }
-
-
-
-        public IActionResult EditExcursion(ExcursionViewModel model, int[] location)
-        {
-            throw new Exception();
-        }
 
         #endregion
 

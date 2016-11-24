@@ -20,9 +20,9 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpGet]
-        public IActionResult WorksOfSculptorReport(string sculptorName)
+        public IActionResult WorksOfSculptorReport(int sculptorId)
         {
-            var sculptor = _db.Sculptors.Single(s => s.Name == sculptorName);
+            var sculptor = _db.Sculptors.Single(s => s.SculptorId == sculptorId);
             var reportList = _db.Sculptures.Include(s => s.Style).Include(s => s.Sculptor)
                                 .Where(s => s.Sculptor == sculptor)
                                 .ToList();
@@ -33,9 +33,43 @@ namespace CourseProjectSculptureWorks.Controllers
                                         NumberOfSculptures = reportList.Where(r => r.Style.StyleName == g.Key).Count()
                                     })
                                     .ToList();
-            ViewData["SculptorName"] = sculptorName;
+            ViewData["SculptorName"] = sculptor.Name;
             ViewData["NumberOfSculptures"] = reportList.Count; 
             return View(groupedList);
+        }
+
+
+        [HttpGet]
+        public IActionResult ConductedExcursionsReport()
+        {
+            var groupedByLocation = _db.Compositions
+                                        .Include(c => c.Excursion)
+                                        .ThenInclude(e => e.ExcursionType)
+                                        .Include(c => c.Location)
+                                        .Where(c => c.Excursion.DateOfExcursion < DateTime.Now)
+                                        .Select(c => new ConductedExcursionViewModel
+                                        {
+                                             LocationName = c.Location.LocationName,
+                                             NameOfExcursionType = c.Excursion.ExcursionType.NameOfType
+                                        })
+                                        .ToList()
+                                        .GroupBy(c => c.LocationName);
+
+            List<ConductedExcursionViewModel> resultList = new List<ConductedExcursionViewModel>();
+            foreach(var item in groupedByLocation)
+            {
+                var groupedByExcursionTypeList = item.GroupBy(i => i.NameOfExcursionType)
+                                                        .Select(i => new ConductedExcursionViewModel
+                                                        {
+                                                            LocationName = item.Key,
+                                                            NameOfExcursionType = i.Key,
+                                                            ExcursionsNumber = i.Count()
+                                                        });
+                foreach (var element in groupedByExcursionTypeList)
+                    resultList.Add(element);
+            }
+            ViewData["NumberOfExcursions"] = _db.Excursions.Count();
+            return View(resultList);
         }
     }
 }

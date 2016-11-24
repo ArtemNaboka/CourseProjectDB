@@ -1,4 +1,5 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="js/excursions.js" />
 /// <reference path="js/excursiontypes.js" />
 /// <reference path="js/locations.js" />
 /// <reference path="js/sculptors.js" />

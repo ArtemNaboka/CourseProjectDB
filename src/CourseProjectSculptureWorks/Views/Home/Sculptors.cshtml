@@ -72,7 +72,7 @@
                                 <span>-</span>
                             }
                         </td>
-                        <td><a href="#" class="glyphicon glyphicon-save" title="Скачать отчет"></a></td>
+                        <td><a asp-controller="Report" asp-action="WorksOfSculptorReport" asp-route-sculptorId="@sculptor.SculptorId" class="glyphicon glyphicon-save" title="Скачать отчет"></a></td>
                         <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td><a class="del" style="color:crimson;" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>

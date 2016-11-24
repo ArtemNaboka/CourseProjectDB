@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace CourseProjectSculptureWorks.Models.ViewModels
 {
-    public class ExcursionViewModel
+    public class ExcursionsViewModel
     {
         [Required]
         [Display(Name = "Тематика")]
         public string Subjects { get; set; }
 
-        [Display(Name = "Местоположение")]
-        public int LocationId { get; set; }
+        [Display(Name = "Местоположения")]
+        public int[] LocationsId { get; set; }
         public int ExcursionId { get; set; }
 
         [Required]
@@ -26,5 +26,6 @@ namespace CourseProjectSculptureWorks.Models.ViewModels
         [Display(Name = "Количество людей")]
         [Range(1, 1000)]
         public int NumberOfPeople { get; set; }
+
     }
 }
