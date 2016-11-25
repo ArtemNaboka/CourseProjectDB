@@ -12,18 +12,24 @@ td
 
 table
 {
-    margin-right: -100px;
+    margin-right: -2000px;
 }
 
 .column
 {
-    display: inline-table;
     margin-top: 30px;
 }
 
 .features
 {
-    margin: 40px 50px 0 -30px;
+    margin-left:20px;
+    background: #ededed;
+}
+
+.col
+{
+    display:inline-table;
+    margin:30px 20px 20px 20px;
 }
 
 a

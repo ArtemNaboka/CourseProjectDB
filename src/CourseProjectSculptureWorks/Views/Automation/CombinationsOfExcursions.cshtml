@@ -1,0 +1,15 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<List<Location>>
+
+@{ 
+    ViewData["Title"] = "Экскурсии";
+}
+
+@foreach(var list in Model)
+{
+    foreach(var location in list)
+    {
+        <p>@location.LocationName</p>
+    }
+    <hr />
+}

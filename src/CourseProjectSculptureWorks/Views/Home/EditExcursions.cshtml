@@ -1,0 +1,95 @@
+﻿@using CourseProjectSculptureWorks.Models.ViewModels
+@using CourseProjectSculptureWorks.Data
+@model ExcursionsViewModel
+
+@{
+    ViewData["Title"] = "Редактировать экскурсии";
+}
+
+@inject ApplicationDbContext db
+
+<div>
+    <form class="form-horizontal" method="post">
+        <h4>Добавление новой экскурсии</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Subjects" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Subjects" class="form-control" />
+                <span asp-validation-for="Subjects" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ExcursionTypeId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="ExcursionTypeId" class="form-control">
+                    @foreach (var excursionType in db.ExcursionTypes)
+                    {
+                        <option value="@excursionType.ExcursionTypeId">@excursionType.NameOfType</option>
+                    }
+                </select>
+                <span asp-validation-for="ExcursionTypeId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LocationsId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <span class="hider form-control" style="cursor:pointer;padding-top:5px;width:160px;">
+                    Местоположения
+                    <span style="width:3px; height:3px;" class="glyphicon glyphicon-chevron-down"></span>
+                </span>
+                <div id="hidden" style="display: none;">
+                    @foreach (var location in db.Locations)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="location" value="@location.LocationId">@location.LocationName (@location.Country, @location.City)
+                            </label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="LocationsId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateOfExcursion" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input type="date" asp-for="DateOfExcursion" class="form-control" />
+                <span asp-validation-for="DateOfExcursion" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NumberOfPeople" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NumberOfPeople" class="form-control" />
+                <span asp-validation-for="NumberOfPeople" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default">Сохранить</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+
+@foreach(var locationId in (int[])ViewBag.LocationsId)
+{
+    <script>
+        var locationId = @locationId;
+        $("input[value=" + locationId +"]").attr("checked", true);
+    </script>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".hider").click(function(){
+            $("#hidden").slideToggle("slow");
+            return false;
+        });
+    });
+</script>

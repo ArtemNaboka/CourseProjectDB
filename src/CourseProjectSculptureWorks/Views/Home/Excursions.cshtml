@@ -56,8 +56,25 @@
                         </td>
                         <td>@excursion.NumberOfPeople чел.</td>
                         <td>@excursion.PriceOfExcursion UAN</td>
-                        <td><a style="color:cornflowerblue;" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursion"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a style="color:crimson;" class="del" excursionId="@excursion.ExcursionId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td>
+                            @if (locations.Count == 1)
+                            {
+                                <a style="color:cornflowerblue;" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursion">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a style="color:cornflowerblue;" multi="false" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursions">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            <a style="color:crimson;" multi="true" class="del" excursionId="@excursion.ExcursionId" title="Удалить">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
                     </tr>
                 }
             </table>

@@ -610,6 +610,7 @@ namespace CourseProjectSculptureWorks.Controllers
                 //_db.Compositions.Single(c => c.LocationId == oldLocation && c.ExcursionId == model.ExcursionId).LocationId = model.LocationId;
                 var composition = await _db.Compositions.SingleAsync(c => c.LocationId == oldLocation && c.ExcursionId == model.ExcursionId);
                 _db.Compositions.Remove(composition);
+                await _db.SaveChangesAsync();
                 _db.Compositions.Add(new Composition
                 {
                     LocationId = model.LocationId,
@@ -679,6 +680,74 @@ namespace CourseProjectSculptureWorks.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> EditExcursions(int? excursionId)
+        {
+            if (excursionId == null)
+                return NotFound();
+            var excursion = await _db.Excursions.Include(e => e.ExcursionType).SingleAsync(e => e.ExcursionId == excursionId);
+            var model = new ExcursionsViewModel
+            {
+                ExcursionId = excursion.ExcursionId,
+                DateOfExcursion = excursion.DateOfExcursion,
+                ExcursionTypeId = excursion.ExcursionType.ExcursionTypeId,
+                Subjects = excursion.Subjects,
+                NumberOfPeople = excursion.NumberOfPeople,
+            };
+            ViewBag.LocationsId = await _db.Compositions
+                                        .Where(c => c.ExcursionId == excursionId)
+                                        .Select(c => c.LocationId)
+                                        .ToArrayAsync();
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditExcursions(ExcursionsViewModel model, int[] location)
+        {
+            if(ModelState.IsValid)
+            {
+                var excursionType = await _db.ExcursionTypes.SingleAsync(e => e.ExcursionTypeId == model.ExcursionTypeId);
+                var locations = await _db.Locations.Where(l => location.Contains(l.LocationId)).ToArrayAsync();
+                decimal priceForLocations = locations.Select(l => l.PriceForPerson).Sum();
+                var excursion = _db.Excursions.Single(e => e.ExcursionId == model.ExcursionId);
+                excursion.Subjects = model.Subjects;
+                excursion.DateOfExcursion = model.DateOfExcursion;
+                excursion.ExcursionType = excursionType;
+                excursion.NumberOfPeople = model.NumberOfPeople;
+                excursion.PriceOfExcursion = priceForLocations * model.NumberOfPeople * (1 - excursionType.Discount / 100);
+                _db.Excursions.Update(excursion);
+
+                var oldCompositions = await _db.Compositions.Where(c => c.ExcursionId == excursion.ExcursionId).ToListAsync();
+                oldCompositions.ForEach(c => _db.Compositions.Remove(c));
+                await _db.SaveChangesAsync();
+                foreach (var singleLocationId in location)
+                {
+                    _db.Compositions.Add(new Composition
+                    {
+                        ExcursionId = excursion.ExcursionId,
+                        LocationId = singleLocationId,
+                        Excursion = excursion,
+                        Location = locations.Single(l => l.LocationId == singleLocationId)
+                    });
+                }
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Excursions));
+            }
+            return View(model);
+        } 
+
+
+        [HttpPost]
+        public async Task<bool> DeleteExcursions(IntegerModel model)
+        {
+            var excursion = await _db.Excursions.SingleAsync(e => e.ExcursionId == model.Integer);
+            var compositions = await _db.Compositions.Where(c => c.ExcursionId == model.Integer).ToListAsync();
+            _db.Excursions.Remove(excursion);
+            compositions.ForEach(c => _db.Compositions.Remove(c));
+            await _db.SaveChangesAsync();
+            return _db.Excursions != null && _db.Excursions.Count() != 0;
+        }
 
         #endregion
 

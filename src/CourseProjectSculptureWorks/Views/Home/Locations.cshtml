@@ -9,64 +9,61 @@
 <link rel="stylesheet" href="~/css/tableStyles.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/locations.js"></script>
-
+<a asp-action="AddNewLocation" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+<br />
 <div class="column features">
-    <form method="get" class="form-horizontal">
-        <input class="form-control" name="searchString" type="text" placeholder="Название, цена, длительность" value="@ViewBag.SearchString" />
-        <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
-        <div>
-            <br />
+    <form method="get" class="form-horizontal" style="margin:40px 20px;">
+        <div class="col" style="display:inline-table">
             <h4>
-                Сортировать
+                Поиск
             </h4>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="1">По виду</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="2">По стране</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="3">По городу</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="4">По цене</label>
-            </div>
-            <div class="radio">
-                <label><input type="radio" name="sortNum" value="5">По длительности</label>
-            </div>
+            <input class="form-control" name="searchString" type="text" placeholder="Название, цена, длительность" value="@ViewBag.SearchString" />
+            <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
+        </div>
+        <div class="col" style="display:inline-table;margin-left:20%;">
+            <h4>
+                Сортировка
+            </h4>
+            <select class="form-control" name="sortNum">
+                <option value="0">В исходном порядке</option>
+                <option value="1">По виду</option>
+                <option value="2">По стране</option>
+                <option value="3">По городу</option>
+                <option value="4">По цене</option>
+                <option value="5">По длительности</option>
+            </select>
             <input style="width:100%; margin-top:5px;" type="submit" value="Сортировать" class="btn btn-primary" />
         </div>
-        <h4>Фильтр</h4>
-        @{ 
-            int count = 1;
-        }
-        @foreach (var typeOfLocation in Lists.LocationTypes)
-        {
-            <div class="checkbox">
-                <label><input type="checkbox" flag="@count" name="boxFilter" value="@typeOfLocation">@typeOfLocation</label>
-            </div>
-            count++;
-        }
-        <input style="width:100%; margin-top:5px;" type="submit" value="Фильтровать" class="btn btn-primary" />
+        <div class="col" style="display:inline-table; margin-left:20%;">
+            <h4>Фильтр</h4>
+            @{
+                int count = 1;
+            }
+            @foreach (var typeOfLocation in Lists.LocationTypes)
+            {
+                <div class="checkbox">
+                    <label><input type="checkbox" flag="@count" name="boxFilter" value="@typeOfLocation">@typeOfLocation</label>
+                </div>
+                count++;
+            }
+            <input style="width:100%; margin-top:5px;" type="submit" value="Фильтровать" class="btn btn-primary" />
+        </div>
     </form>
 </div>
 <div class="column">
-    <a asp-action="AddNewLocation" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+    
     <div class="locationContainer">
         @if (Model != null && Model.Count != 0)
         {
             <table class="simple-little-table" cellspacing='0' id="styleTable">
                 <tr style="background-color:aqua;">
-                    <th style="width:150px;"><b>Название</b></th>
-                    <th style="width:70px;"><b>Вид</b></th>
-                    <th style="width:150px;"><b>Адрес</b></th>
-                    <th style="width:130px;"><b>Цена экскурсии для одного человека</b></th>
-                    <th style="width:20px;"><b>Длительность экскурсии</b></th>
-                    <th style="width:50px;"></th>
-                    <th style="width:50px;"></th>
+                    <th><b>Название</b></th>
+                    <th><b>Вид</b></th>
+                    <th><b>Адрес</b></th>
+                    <th><b>Цена экскурсии для одного человека</b></th>
+                    <th><b>Длительность экскурсии</b></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 @foreach (var location in Model)
                 {
@@ -93,7 +90,7 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
-        $("input[value=" + checkedNum + "]").attr("checked", true);
+        $("option[value=" + checkedNum + "]").attr("selected", true);
     </script>
 }
 
