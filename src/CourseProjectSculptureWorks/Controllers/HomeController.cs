@@ -527,12 +527,68 @@ namespace CourseProjectSculptureWorks.Controllers
 
         #region ExcursionController
 
-        public async Task<IActionResult> Excursions()
+        public async Task<IActionResult> Excursions(int searchCriteria = 0, string searchString = null,
+                                                    DateTime? dateOfExcursion = null, int sortNum = 0)
         {
-            return View(await _db.Excursions
-                .Include(e => e.ExcursionType)
-                .Include(e => e.Compositions)
-                .ToListAsync());
+            var searchedExcursions = await _db.Excursions
+                                    .Include(e => e.ExcursionType)
+                                    .Include(e => e.Compositions)
+                                    .ToListAsync();
+            if (searchString != null && searchString != String.Empty)
+            {
+                var locations = await _db.Locations.Where(l => l.LocationName == searchString).ToListAsync();
+                if (searchCriteria == 0)
+                {
+                    searchedExcursions = searchedExcursions.Where(s => s.Subjects.ToLower().Trim().Contains(searchString.ToLower().Trim())
+                    || s.ExcursionType.NameOfType.ToLower().Trim().Contains(searchString)
+                    || s.NumberOfPeople.ToString().Equals(searchString)
+                    || _db.Compositions.Where(c => c.ExcursionId == s.ExcursionId && locations
+                                .Select(l => l.LocationName.Trim().ToLower()).Contains(searchString.Trim().ToLower())) != null
+                    || s.PriceOfExcursion.ToString().Equals(searchString)).ToList();
+                }
+                else if (searchCriteria == 1)
+                    searchedExcursions = searchedExcursions.Where(s => s.Subjects.ToLower().Trim().Contains(searchString.ToLower().Trim())).ToList();
+                else if (searchCriteria == 2)
+                    searchedExcursions = searchedExcursions.Where(s => s.ExcursionType.NameOfType.ToLower().Trim().Contains(searchString)).ToList();
+                else if (searchCriteria == 3)
+                    searchedExcursions = searchedExcursions.Where(s => _db.Compositions.Where(c => c.ExcursionId == s.ExcursionId && locations
+                               .Select(l => l.LocationName.Trim().ToLower()).Contains(searchString.Trim().ToLower())) != null).ToList();
+                else if (searchCriteria == 4)
+                    searchedExcursions = searchedExcursions.Where(s => s.NumberOfPeople.ToString().Equals(searchString)).ToList();
+                else if(searchCriteria == 5)
+                    searchedExcursions = searchedExcursions.Where(s => s.PriceOfExcursion.ToString().Equals(searchString)).ToList();
+                ViewBag.SearchString = searchString;
+                ViewBag.SearchCriteria = searchCriteria;
+            }
+            else if (dateOfExcursion != null)
+            {
+                searchedExcursions = searchedExcursions.Where(e => e.DateOfExcursion == dateOfExcursion).ToList();
+                ViewBag.SearchString = searchString;
+                ViewBag.SearchCriteria = searchCriteria;
+            }
+            if (sortNum != 0)
+            {
+                switch (sortNum)
+                {
+                    case 1:
+                        searchedExcursions = searchedExcursions.OrderBy(e => e.Subjects).ToList();
+                        break;
+                    case 2:
+                        searchedExcursions = searchedExcursions.OrderBy(e => e.DateOfExcursion).ToList();
+                        break;
+                    case 3:
+                        searchedExcursions = searchedExcursions.OrderBy(e => e.ExcursionType.NameOfType).ToList();
+                        break;
+                    case 4:
+                        searchedExcursions = searchedExcursions.OrderBy(e => e.NumberOfPeople).ToList();
+                        break;
+                    case 5:
+                        searchedExcursions = searchedExcursions.OrderBy(e => e.PriceOfExcursion).ToList();
+                        break;
+                }
+                ViewBag.Checked = sortNum;
+            }
+            return View(searchedExcursions);
         }
 
 

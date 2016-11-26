@@ -12,15 +12,43 @@
 <link rel="stylesheet" href="~/css/excursions.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/excursions.js"></script>
-
+<a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсию</a>
+<a asp-action="AddNewExcursions" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсии</a>
+<br />
+<a style="margin-left:40px;" class="btn btn-success" asp-action="Excursions">Показать все</a>
+<br />
 <div class="column features">
-    <form method="get" class="form-horizontal">
-
+    <form asp-action="Excursions" method="get">
+        <div style="display:inline-table;margin-left:20px;">
+            <h4 style="margin-left:60px;">Поиск</h4>
+            <select name="searchCriteria" class="form-control" style="margin-bottom:5px;">
+                <option criteria="0" value="0">По всем параметрам</option>
+                <option criteria="1" value="1">По тематике</option>
+                <option criteria="2" value="">По дате экскурсии</option>
+                <option criteria="3" value="2">По виду экскурсии</option>
+                <option criteria="4" value="3">По местоположению</option>
+                <option criteria="5" value="4">По количеству человек</option>
+                <option criteria="6" value="5">По цене</option>
+            </select>
+            <input name="searchString" value="@ViewBag.SearchString" type="text" class="form-control" placeholder="Название, стиль..." /><br />
+            <input style="width:100%;" type="submit" class="btn btn-info" value="Найти" />
+        </div>
+        <div style="display:inline-table;margin-left:200px;">
+            <h4 style="margin-left:40px;">Сортировка</h4>
+            <select class="form-control" name="sortNum">
+                <option value="0">В исходном порядке</option>
+                <option value="1">По тематике</option>
+                <option value="2">По дате</option>
+                <option value="3">По виду</option>
+                <option value="4">По количеству людей</option>
+                <option value="5">По стоимости</option>
+            </select><br />
+            <input style="width:100%;" type="submit" class="btn btn-info" value="Сортировать" />
+        </div>
     </form>
 </div>
 <div class="column">
-    <a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсию</a>
-    <a asp-action="AddNewExcursions" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсии</a>
+    
     <div class="locationContainer">
         @if (Model != null && Model.Count != 0)
         {
@@ -32,7 +60,7 @@
                     <th><b>Вид экскурсии</b></th>
                     <th><b>Местоположения</b></th>
                     <th><b>Количество человек</b></th>
-                    <th><b>Цена экскурсии</b></th>
+                    <th><b>Стоимость экскурсии</b></th>
                     <th style="width:50px;"></th>
                     <th style="width:50px;"></th>
                 </tr>
@@ -87,4 +115,19 @@
 </div>
 
 
+@if (ViewBag.Checked != 0)
+{
+    <script>
+        var checkedNum = @ViewBag.Checked;
+        $("option[value=" + checkedNum + "]").attr("selected", true);
+    </script>
+}
+
+@if (ViewBag.SearchCriteria != null)
+{
+    <script>
+        var criteria = @ViewBag.SearchCriteria;
+        $("option[criteria=" + criteria + "]").attr("selected", "true");
+    </script>
+}
 
