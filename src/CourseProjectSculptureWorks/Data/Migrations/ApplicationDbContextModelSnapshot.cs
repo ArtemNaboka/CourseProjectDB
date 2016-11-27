@@ -236,6 +236,23 @@ namespace CourseProjectSculptureWorks.Data.Migrations
                     b.ToTable("Styles");
                 });
 
+            modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Transfer", b =>
+                {
+                    b.Property<int>("StartLocationId");
+
+                    b.Property<int>("FinishLocationId");
+
+                    b.Property<int>("Duration");
+
+                    b.HasKey("StartLocationId", "FinishLocationId");
+
+                    b.HasIndex("FinishLocationId");
+
+                    b.HasIndex("StartLocationId");
+
+                    b.ToTable("Transfers");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id");
@@ -376,6 +393,19 @@ namespace CourseProjectSculptureWorks.Data.Migrations
                     b.HasOne("CourseProjectSculptureWorks.Models.Entities.Style", "Style")
                         .WithMany("Sculptures")
                         .HasForeignKey("StyleId");
+                });
+
+            modelBuilder.Entity("CourseProjectSculptureWorks.Models.Entities.Transfer", b =>
+                {
+                    b.HasOne("CourseProjectSculptureWorks.Models.Entities.Location", "FinishLocation")
+                        .WithMany("FinishTransfers")
+                        .HasForeignKey("FinishLocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CourseProjectSculptureWorks.Models.Entities.Location", "StartLocation")
+                        .WithMany("StartTransfers")
+                        .HasForeignKey("StartLocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

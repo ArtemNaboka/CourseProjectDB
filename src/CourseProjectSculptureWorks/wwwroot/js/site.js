@@ -10,3 +10,7 @@ $("#firstReport").click(function () {
 $("#aut").click(function () {
     $("#myAutBox").modal('show');
 });
+
+$("#tran").click(function () {
+    $("#myCityBox").modal('show');
+});

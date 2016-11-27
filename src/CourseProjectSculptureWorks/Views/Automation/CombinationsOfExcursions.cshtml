@@ -3,13 +3,32 @@
 
 @{ 
     ViewData["Title"] = "Экскурсии";
+    var excursionType = (ExcursionType)ViewBag.ExcursionType;
 }
-
+<h1>Экскурсии для @ViewBag.NumberOfPeople человек по городу @Model.First().First().City</h1>
+<h2>Тип экскурсий: @excursionType.NameOfType</h2>
+<h2>Выделенное время: @ViewBag.Time мин</h2>
+<hr />
 @foreach(var list in Model)
 {
+    var count = 1;
+    <p><b>Местоположения: </b></p>
     foreach(var location in list)
     {
-        <p>@location.LocationName</p>
+        <p>@count. @location.LocationName</p>
+        count++;
     }
+    decimal price = list.Select(l => l.PriceForPerson).Sum() * (int)ViewBag.NumberOfPeople * (int)(1 - excursionType.Discount / 100);
+    int duration = list.Select(l => l.DurationOfExcursion).Sum();
+    <p><b>Цена экскурсий: </b>@price UAN</p>
+    <p><b>Длительность экскурсий: </b>@duration мин</p>
+    <form method="post" asp-route-date="@DateTime.Now" asp-route-locations="@list.ToArray()"
+           asp-route-typeOfExcursions="@excursionType.ExcursionTypeId" asp-route-numberOfPeople="@ViewBag.NumberOfPeople">
+        <div style="display:none;">
+            <input type="date" name="" value="@DateTime.Now.Date" />
+            <input type="number" value="" />
+        </div>
+        <input type="submit" class="btn btn-success" value="Добавить экскурсии" />
+    </form>
     <hr />
 }

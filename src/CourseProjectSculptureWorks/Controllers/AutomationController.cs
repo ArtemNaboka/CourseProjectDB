@@ -19,35 +19,57 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
-        public IActionResult CombinationsOfExcursions(string city, int minutesForExcursions)
+        public IActionResult CombinationsOfExcursions(string city, int minutesForExcursions,
+                                                        int excursionTypeId, int numberOfpeople)
         {
-            //var locationsInCity = _db.Locations.Where(l => l.City == city).ToList();
             var locationsInCity = getCombination(_db.Locations
                                                 .Where(l => l.City == city)
-                                                .ToList());
-
+                                                .ToList())
+                                                .OrderByDescending(l => l.Count)
+                                                .ToList();
+            var resultList = new List<List<Location>>();
             foreach(var locations in locationsInCity)
             {
-                if (locations.Select(l => l.DurationOfExcursion).Sum() > minutesForExcursions)
-                    continue;
-                Graph tempGraph = new Graph(locations);
-                for(int i = 0; i < locations.Count; i++)
+                if(locations.Select(l => l.DurationOfExcursion).Sum() <= minutesForExcursions)
                 {
-                    tempGraph.AddVertex(locations[i]);
-                    for(var j = 0; j < i; j++)
-                    {
-                        ////if(_db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
-                        ////&& t.SecondLocation == locations[i]) != null)
-                        //{
-                        //    tempGraph.AddEdge(i, j, _db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
-                        ////&& t.SecondLocation == locations[i]));
-                        //}
-                    }
+                    resultList.Add(locations);
                 }
             }
-            return View(locationsInCity);
+            //foreach(var locations in locationsInCity)
+            //{
+            //    if (locations.Select(l => l.DurationOfExcursion).Sum() > minutesForExcursions)
+            //        continue;
+            //    Graph tempGraph = new Graph(locations);
+            //    for(int i = 0; i < locations.Count; i++)
+            //    {
+            //        tempGraph.AddVertex(locations[i]);
+            //        for(var j = 0; j < i; j++)
+            //        {
+            //            ////if(_db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
+            //            ////&& t.SecondLocation == locations[i]) != null)
+            //            //{
+            //            //    tempGraph.AddEdge(i, j, _db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
+            //            ////&& t.SecondLocation == locations[i]));
+            //            //}
+            //        }
+            //    }
+            //}
+            ViewBag.ExcursionType = _db.ExcursionTypes.Single(e => e.ExcursionTypeId == excursionTypeId);
+            ViewBag.NumberOfPeople = numberOfpeople;
+            ViewBag.Time = minutesForExcursions;
+            return View(resultList);
         }
 
+
+
+        [HttpPost]
+        public IActionResult AddExcursions(int? numberOfPeople, int? typeOfExcursions, 
+                                            DateTime? date, Location[] locations)
+        {
+            if (locations == null)
+                throw new Exception("GG WP");
+            return View();
+        }
 
         private List<List<Location>> getCombination(List<Location> list)
         {

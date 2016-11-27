@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CourseProjectSculptureWorks.Models;
 using CourseProjectSculptureWorks.Models.Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CourseProjectSculptureWorks.Data
 {
@@ -18,6 +19,7 @@ namespace CourseProjectSculptureWorks.Data
         public DbSet<ExcursionType> ExcursionTypes { get; set; }
         public DbSet<Excursion> Excursions { get; set; }
         public DbSet<Composition> Compositions { get; set; }
+        public DbSet<Transfer> Transfers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -39,6 +41,20 @@ namespace CourseProjectSculptureWorks.Data
                 .WithMany(e => e.Compositions)
                 .HasForeignKey(c => c.ExcursionId);
 
+            builder.Entity<Transfer>()
+                       .HasOne(t => t.StartLocation)
+                       .WithMany(l => l.StartTransfers)
+                       .HasForeignKey(t => t.StartLocationId)
+                       .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Transfer>()
+                        .HasOne(t => t.FinishLocation)
+                        .WithMany(l => l.FinishTransfers)
+                        .HasForeignKey(t => t.FinishLocationId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Transfer>()
+                        .HasKey(t => new { t.StartLocationId, t.FinishLocationId });
             base.OnModelCreating(builder);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,5 +49,11 @@ namespace CourseProjectSculptureWorks.Models.Entities
 
         public virtual List<Sculpture> Sculptures { get; set; }
         public virtual List<Composition> Compositions { get; set; }
+
+        [InverseProperty("StartLocation")]
+        public virtual List<Transfer> StartTransfers { get; set; }
+
+        [InverseProperty("FinishLocation")]
+        public virtual List<Transfer> FinishTransfers { get; set; }
     }
 }

@@ -525,6 +525,107 @@ namespace CourseProjectSculptureWorks.Controllers
 
         #endregion
 
+        #region TransferController
+
+        public IActionResult Transfers()
+        {
+            //var transfers = await _db.Transfers.Include(t => t.StartLocation)
+            //                                    .Include(t => t.FinishLocation)
+            //                                    .Where(t => t.StartLocation.City == city
+            //                                    && t.FinishLocation.City == city)
+            //                                    .ToListAsync();
+
+            var resultList = new List<Transfer>();
+            foreach(var transfer in _db.Transfers.Include(t => t.StartLocation).Include(t => t.FinishLocation))
+            {
+                if(resultList.SingleOrDefault(t => t.StartLocationId == transfer.FinishLocationId
+                   && t.FinishLocationId == transfer.StartLocationId) == null)
+                {
+                    resultList.Add(transfer);
+                }
+            }
+            return View(resultList);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddNewTransfer(string city)
+        {
+            ViewBag.Locations = await _db.Locations.Where(l => l.City == city)
+                                        .ToListAsync(); 
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewTransfer(Transfer transfer, string city)
+        {
+            if (transfer.StartLocationId == transfer.FinishLocationId)
+                ModelState.AddModelError("Same", "Выберите разные метоположения");
+            if(await _db.Transfers.SingleOrDefaultAsync(t => t.StartLocationId == transfer.StartLocationId
+                && t.FinishLocationId == transfer.FinishLocationId) != null ||
+                await _db.Transfers.SingleOrDefaultAsync(t => t.StartLocationId == transfer.FinishLocationId
+                && t.FinishLocationId == transfer.StartLocationId) != null)
+            {
+                ModelState.AddModelError("AlreadyExist", "Данное перемещение уже существует");
+            }
+            if(ModelState.IsValid)
+            {
+                _db.Transfers.Add(transfer);
+                Transfer sameTransfer = new Transfer
+                {
+                    StartLocationId = transfer.FinishLocationId,
+                    FinishLocationId = transfer.StartLocationId,
+                    Duration = transfer.Duration
+                };
+                _db.Transfers.Add(sameTransfer);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Transfers));
+            }
+            ViewBag.Locations = await _db.Locations.Where(l => l.City == city)
+                                        .ToListAsync();
+            return View(transfer);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditTransfer(int? startLocationId, int? finishLocationId)
+        {
+            if (startLocationId == null || finishLocationId == null)
+                return NotFound();
+            var transfer = await _db.Transfers.SingleAsync(t => t.StartLocationId == startLocationId
+                                                            && t.FinishLocationId == finishLocationId);
+            ViewBag.FirstLocation = _db.Locations.Single(l => l.LocationId == startLocationId);
+            ViewBag.SecondLocation = _db.Locations.Single(l => l.LocationId == finishLocationId);
+            return View(transfer);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditTransfer(Transfer transfer)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Transfers.Update(transfer);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Transfers));
+            }
+            return View(transfer);
+        } 
+
+        public async Task<bool> DeleteTransfer(int startLocationId, int finishLocationId)
+        {
+            var transfer = await _db.Transfers.SingleAsync(t => t.StartLocationId == startLocationId 
+                                                && t.FinishLocationId == finishLocationId);
+            _db.Transfers.Remove(transfer);
+            var sameTransfer = await _db.Transfers.SingleAsync(t => t.StartLocationId == finishLocationId
+                                                && t.FinishLocationId == startLocationId);
+            _db.Transfers.Remove(sameTransfer);
+            await _db.SaveChangesAsync();
+            return _db.Transfers != null && _db.Transfers.Count() != 0;
+        }
+
+        #endregion
+
         #region ExcursionController
 
         public async Task<IActionResult> Excursions(int searchCriteria = 0, string searchString = null,

@@ -1,0 +1,50 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model Transfer
+
+@{
+    ViewData["Title"] = "Добавить перемещение по городу";
+    var locations = (List<Location>)ViewBag.Locations;
+    var city = locations.First().City;
+}
+
+<form asp-controller="Home" asp-action="AddNewTransfer" asp-route-city="@city" method="post" class="form-horizontal">
+    <h4>Добавление нового перемещения по городу</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="StartLocationId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select class="form-control" asp-for="StartLocationId">
+                @foreach(var location in locations)
+                {
+                    <option value="@location.LocationId">@location.LocationName</option>
+                }
+            </select>
+            <span asp-validation-for="StartLocationId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="FinishLocationId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="FinishLocationId" class="form-control">
+               @foreach (var location in locations)
+               {
+                    <option value="@location.LocationId">@location.LocationName</option>
+               }
+            </select>
+            <span asp-validation-for="FinishLocationId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Duration" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Duration" class="form-control" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Добавить</button>
+        </div>
+    </div>
+</form>

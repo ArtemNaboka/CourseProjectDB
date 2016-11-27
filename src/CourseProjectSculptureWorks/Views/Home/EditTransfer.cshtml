@@ -1,0 +1,46 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model Transfer
+
+@{ 
+    ViewData["Title"] = "Редактирование перемещения по городу";
+    var firstCity = (Location)ViewBag.FirstLocation;
+    var secondCity = (Location)ViewBag.SecondLocation;
+}
+
+<form asp-controller="Home" asp-action="EditTransfer" method="post" class="form-horizontal">
+    <h4>Редактирование перемещения по городу</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="StartLocationId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input type="hidden" value="@Model.StartLocationId" asp-for="StartLocationId" />
+            <select class="form-control" disabled>
+                <option value="@firstCity.LocationId" selected>@firstCity.LocationName</option>
+            </select>
+            <span asp-validation-for="StartLocationId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="FinishLocationId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input type="hidden" asp-for="FinishLocationId" value="@Model.FinishLocationId" />
+            <select class="form-control" disabled>
+                 <option value="@secondCity.LocationId" selected>@secondCity.LocationName</option>
+            </select>
+            <span asp-validation-for="FinishLocationId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Duration" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Duration" class="form-control" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Редактировать</button>
+        </div>
+    </div>
+</form>

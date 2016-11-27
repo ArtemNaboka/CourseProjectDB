@@ -1,0 +1,79 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Transfer>
+
+
+@{ 
+    ViewData["Title"] = "Перемещения";
+}
+
+<link rel="stylesheet" href="~/css/tableStyles.css" />
+<link rel="stylesheet" href="~/css/transfers.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+<div class="column features">
+    <form method="get" class="form-horizontal">
+
+    </form>
+</div>
+
+<div class="column mainPart">
+    <a id="tran" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+    <div class="styleContainer">
+        @if (Model != null && Model.Count != 0)
+        {
+            <table id="styleTable" class="simple-little-table" cellspacing='0'>
+                <tr style="background-color:aqua;">
+                    <th><b>Местоположение 1</b></th>
+                    <th><b>Местоположение 2</b></th>
+                    <th><b>Длительность перемещения</b></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+
+                @foreach (var transfer in Model)
+                {
+                    <tr id="">
+                        <td>@transfer.StartLocation.LocationName</td>
+                        <td>@transfer.FinishLocation.LocationName</td>
+                        <td>@transfer.Duration мин</td>
+                        <td>
+                            <a style="color:cornflowerblue;" asp-action="EditTransfer" asp-route-startLocationId="@transfer.StartLocationId" asp-route-finishLocationId="@transfer.FinishLocationId">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a style="color:crimson;" class="del">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h3>В базе данных отсутствует искомая информация о перемещениях..</h3>
+        }
+    </div>
+</div>
+
+
+@if (ViewBag.Checked != 0)
+{
+    <script>
+        var checkedNum = @ViewBag.Checked;
+        $("input[value=" + checkedNum + "]").attr("checked", true);
+    </script>
+}
+
+@if (ViewBag.Filters != null)
+{
+    foreach (var filter in ((List<int>)ViewBag.Filters))
+    {
+        <script>
+            var scriptFilter = @filter;
+            $("input[flag=" + scriptFilter + "]").attr("checked", true);
+        </script>
+    }
+}

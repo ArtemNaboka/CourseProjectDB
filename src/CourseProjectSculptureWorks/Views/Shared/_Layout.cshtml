@@ -42,6 +42,7 @@
                             <li><a asp-controller="Home" asp-action="Styles">Стили</a></li>
                             <li class="divider"></li>
                             <li><a asp-action="Locations" asp-controller="Home">Местоположения</a></li>
+                            <li><a asp-action="Transfers" asp-controller="Home">Перемещения</a></li>
                             <li class="divider"></li>
                             <li><a asp-controller="Home" asp-action="Excursions">Экскурсии</a></li>
                             <li><a asp-controller="Home" asp-action="ExcursionTypes">Виды экскурсий</a></li>
@@ -120,6 +121,43 @@
                 </div>
                 <div class="modal-body">
                     <form style="margin-left:27%;" method="get" class="form-horizontal" asp-controller="Automation" asp-action="CombinationsOfExcursions">
+                        <h4 style="text-align:center;width:300px;">Выберите город, время для экскурсий, вид экскурсий и количество человек</h4>
+                        <select class="form-control" name="city">
+                            @foreach (var city in db.Locations.GroupBy(l => l.City))
+                            {
+                                <option value="@city.Key">@city.Key</option>
+                            }
+                        </select><br />
+                        <input type="number" class="form-control" name="minutesForExcursions" placeholder="Время (мин)" />
+                        <br />
+                        <select class="form-control" name="excursionTypeId">
+                            @foreach(var excursionType in db.ExcursionTypes)
+                            {
+                                <option value="@excursionType.ExcursionTypeId">@excursionType.NameOfType</option>
+                            }
+                        </select>
+                        <br />
+                        <input class="form-control" type="number" name="numberOfPeople" placeholder="Количество человек" />
+                        <br />
+                        <input style="width:100%;" class="btn btn-primary" type="submit" value="Получить экскурсии" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="myCityBox" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Добавление пермещения по городу</h4>
+                </div>
+                <div class="modal-body">
+                    <form style="margin-left:27%;" method="get" class="form-horizontal" asp-controller="Home" asp-action="AddNewTransfer">
                         <h4 style="margin-left:13%;">Выберите город</h4>
                         <select class="form-control" name="city">
                             @foreach (var city in db.Locations.GroupBy(l => l.City))
@@ -127,7 +165,7 @@
                                 <option value="@city.Key">@city.Key</option>
                             }
                         </select><br />
-                        <input style="width:100%;" class="btn btn-primary" type="submit" value="Получить экскурсии" />
+                        <input style="width:100%;" class="btn btn-primary" type="submit" value="Дальше" />
                     </form>
                 </div>
                 <div class="modal-footer">
