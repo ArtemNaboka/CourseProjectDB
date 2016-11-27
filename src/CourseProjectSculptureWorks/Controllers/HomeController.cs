@@ -563,8 +563,13 @@ namespace CourseProjectSculptureWorks.Controllers
             else if (dateOfExcursion != null)
             {
                 searchedExcursions = searchedExcursions.Where(e => e.DateOfExcursion == dateOfExcursion).ToList();
-                ViewBag.SearchString = searchString;
+                ViewBag.SearchString = String.Format("{2}-{1}-{0}", dateOfExcursion.Value.Day,
+                                                                    dateOfExcursion.Value.Month,
+                                                                    dateOfExcursion.Value.Year); //String.Format("{0}.{1}.{2}", dateOfExcursion.Value.Day,
+                                                                                                 //dateOfExcursion.Value.Month,
+                                                                                                 //dateOfExcursion.Value.Year);
                 ViewBag.SearchCriteria = searchCriteria;
+                ViewBag.IsDate = true;
             }
             if (sortNum != 0)
             {

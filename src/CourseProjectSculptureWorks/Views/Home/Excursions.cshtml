@@ -24,7 +24,7 @@
             <select name="searchCriteria" class="form-control" style="margin-bottom:5px;">
                 <option criteria="0" value="0">По всем параметрам</option>
                 <option criteria="1" value="1">По тематике</option>
-                <option criteria="2" value="">По дате экскурсии</option>
+                <option criteria="10" value="10">По дате экскурсии</option>
                 <option criteria="3" value="2">По виду экскурсии</option>
                 <option criteria="4" value="3">По местоположению</option>
                 <option criteria="5" value="4">По количеству человек</option>
@@ -123,7 +123,18 @@
     </script>
 }
 
-@if (ViewBag.SearchCriteria != null)
+
+@if (ViewBag.IsDate != null && ViewBag.IsDate == true)
+{
+    <script>
+        var criteria = @ViewBag.SearchCriteria;
+        var searchStr = "@ViewBag.SearchString";
+        $("option[criteria=" + criteria + "]").attr("selected", "true");
+        $("input[name=searchString]").replaceWith("<input type='date' value='"+ searchStr + "' name='dateOfExcursion' class='form-control' />");
+        date = true;
+    </script>
+}
+else if (ViewBag.SearchCriteria != null)
 {
     <script>
         var criteria = @ViewBag.SearchCriteria;

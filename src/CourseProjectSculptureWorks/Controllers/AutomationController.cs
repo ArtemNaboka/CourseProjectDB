@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CourseProjectSculptureWorks.Data;
 using CourseProjectSculptureWorks.Models.Entities;
+using CourseProjectSculptureWorks.Models.GraphModel;
 
 namespace CourseProjectSculptureWorks.Controllers
 {
@@ -18,14 +19,37 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
-        public IActionResult CombinationsOfExcursions(string city)
+        public IActionResult CombinationsOfExcursions(string city, int minutesForExcursions)
         {
-            var locationsInCity = _db.Locations.Where(l => l.City == city).ToList();
-            return View(GetCombination(locationsInCity).OrderByDescending(l => l.Count).ToList());
+            //var locationsInCity = _db.Locations.Where(l => l.City == city).ToList();
+            var locationsInCity = getCombination(_db.Locations
+                                                .Where(l => l.City == city)
+                                                .ToList());
+
+            foreach(var locations in locationsInCity)
+            {
+                if (locations.Select(l => l.DurationOfExcursion).Sum() > minutesForExcursions)
+                    continue;
+                Graph tempGraph = new Graph(locations);
+                for(int i = 0; i < locations.Count; i++)
+                {
+                    tempGraph.AddVertex(locations[i]);
+                    for(var j = 0; j < i; j++)
+                    {
+                        ////if(_db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
+                        ////&& t.SecondLocation == locations[i]) != null)
+                        //{
+                        //    tempGraph.AddEdge(i, j, _db.Transfers.SingleOrDefault(t => t.FirstLocation == locations[j]
+                        ////&& t.SecondLocation == locations[i]));
+                        //}
+                    }
+                }
+            }
+            return View(locationsInCity);
         }
 
 
-        private List<List<Location>> GetCombination(List<Location> list)
+        private List<List<Location>> getCombination(List<Location> list)
         {
             var resultList = new List<List<Location>>();
             double count = Math.Pow(2, list.Count);
