@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using CourseProjectSculptureWorks.Data;
 using CourseProjectSculptureWorks.Models.ReportsViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CourseProjectSculptureWorks.Controllers
 {
@@ -22,6 +23,7 @@ namespace CourseProjectSculptureWorks.Controllers
         [HttpGet]
         public IActionResult WorksOfSculptorReport(int sculptorId)
         {
+            //CreateDoc();
             var sculptor = _db.Sculptors.Single(s => s.SculptorId == sculptorId);
             var reportList = _db.Sculptures.Include(s => s.Style).Include(s => s.Sculptor)
                                 .Where(s => s.Sculptor == sculptor)
@@ -70,6 +72,12 @@ namespace CourseProjectSculptureWorks.Controllers
             }
             ViewData["NumberOfExcursions"] = _db.Excursions.Count();
             return View(resultList);
+        }
+
+
+        public void CreateDoc()
+        {
+            Assembly asm = Assembly.Load(new AssemblyName(@"C: \Users\ПК\Documents\Visual Studio 2015\Projects\ConsoleApplication6\ConsoleApplication6\bin\Debug\ConsoleApplication6.exe"));
         }
     }
 }

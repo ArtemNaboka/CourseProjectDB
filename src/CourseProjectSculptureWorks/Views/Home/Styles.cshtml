@@ -12,12 +12,14 @@
 
 
 <div class="column features">
-    <form method="get" class="form-horizontal">
+    <a style="width:100%;" class="btn btn-success" asp-action="Styles">Показать все</a><br />
+    <form style="margin-top:20px;" method="get" class="form-horizontal">
+        <h4>Поиск</h4>
         <input class="form-control" name="searchString" type="text" placeholder="Название стиля, страна" value="@ViewBag.SearchString" />
         <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
     <div>
         <h4>
-            Сортировать
+            Сортировка
         </h4>
             <div class="radio">
                 <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>

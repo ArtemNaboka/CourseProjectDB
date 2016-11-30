@@ -2,7 +2,7 @@
 @model List<WorksOfSculptorViewModel>
 
 @{
-    ViewData["Title"] = "Отчет";
+    ViewData["Title"] = "Отчет по работам скульптора " + ViewData["SculptorName"];
 }
 
 
@@ -32,7 +32,13 @@
         </tr>
     </table>
     <br /><br />
+    <script>
+        window.onload = function()
+        {
+            window.print();
 
+        }
+    </script>
 }
 else
 {

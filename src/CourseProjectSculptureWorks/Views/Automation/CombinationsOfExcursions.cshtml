@@ -5,15 +5,17 @@
     ViewData["Title"] = "Экскурсии";
     var excursionType = (ExcursionType)ViewBag.ExcursionType;
 }
+@if (Model != null && Model.Count != 0)
+{
 <h1>Экскурсии для @ViewBag.NumberOfPeople человек по городу @Model.First().First().City</h1>
 <h2>Тип экскурсий: @excursionType.NameOfType</h2>
 <h2>Выделенное время: @ViewBag.Time мин</h2>
 <hr />
-@foreach(var list in Model)
+@foreach (var list in Model)
 {
     var count = 1;
     <p><b>Местоположения: </b></p>
-    foreach(var location in list)
+    foreach (var location in list)
     {
         <p>@count. @location.LocationName</p>
         count++;
@@ -31,4 +33,9 @@
         <input type="submit" class="btn btn-success" value="Добавить экскурсии" />
     </form>
     <hr />
+    }
+}
+else
+{
+    <h3>Невозможно подобрать комбинации экскурсий для заданого города по заданому времени...</h3>
 }

@@ -26,7 +26,7 @@ namespace CourseProjectSculptureWorks.Controllers
         #region SculptureController
         [HttpGet]
         public async Task<IActionResult> Sculptures(int searchCriteria, string searchString = null,
-            int sortNum = 0, string[] boxFilter = null)
+            int sortOrder = 0, int sortNum = 0, string[] boxFilter = null)
         {
             var searchedSculptures = await _db.Sculptures.Include(s => s.Sculptor)
                 .Include(s => s.Style)
@@ -34,9 +34,10 @@ namespace CourseProjectSculptureWorks.Controllers
                 .ToListAsync();
             if (searchString != null && searchString != String.Empty)
             {
+                List<Sculpture> sculpturesForSearch = await _db.Sculptures.ToListAsync();
                 if (searchCriteria == 0)
                 {
-                    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
                         || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
                         || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
                         || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
@@ -46,53 +47,115 @@ namespace CourseProjectSculptureWorks.Controllers
                         || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 }
                 else if (searchCriteria == 1)
-                    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 2)
-                    searchedSculptures = searchedSculptures.Where(s => s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 3)
-                    searchedSculptures = searchedSculptures.Where(s => s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 4)
-                    searchedSculptures = searchedSculptures.Where(s => s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 5)
-                    searchedSculptures = searchedSculptures.Where(s => s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 6)
-                    searchedSculptures = searchedSculptures.Where(s => s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 7)
-                    searchedSculptures = searchedSculptures.Where(s => s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 else if (searchCriteria == 8)
-                    searchedSculptures = searchedSculptures.Where(s => s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                    sculpturesForSearch = sculpturesForSearch.Where(s => s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //if (searchCriteria == 0)
+                //{
+                //    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
+                //        || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //}
+                //else if (searchCriteria == 1)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 2)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 3)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 4)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 5)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 6)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 7)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
+                //else if (searchCriteria == 8)
+                //    searchedSculptures = searchedSculptures.Where(s => s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 ViewBag.SearchString = searchString;
                 ViewBag.SearchCriteria = searchCriteria;
+                ViewBag.SculpturesId = sculpturesForSearch.Select(s => s.Id).ToArray();
             }
             if (sortNum != 0)
             {
-                switch (sortNum)
+                if (sortOrder == 1)
                 {
-                    case 1:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Type).ToList();
-                        break;
-                    case 2:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Sculptor.Name).ToList();
-                        break;
-                    case 3:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Style.StyleName).ToList();
-                        break;
-                    case 4:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Location.LocationName).ToList();
-                        break;
-                    case 5:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Material).ToList();
-                        break;
-                    case 6:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Year).ToList();
-                        break;
-                    case 7:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Square).ToList();
-                        break;
-                    case 8:
-                        searchedSculptures = searchedSculptures.OrderBy(s => s.Height).ToList();
-                        break;
+                    switch (sortNum)
+                    {
+                        case 1:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Type).ToList();
+                            break;
+                        case 2:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Sculptor.Name).ToList();
+                            break;
+                        case 3:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Style.StyleName).ToList();
+                            break;
+                        case 4:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Location.LocationName).ToList();
+                            break;
+                        case 5:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Material).ToList();
+                            break;
+                        case 6:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Year).ToList();
+                            break;
+                        case 7:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Square).ToList();
+                            break;
+                        case 8:
+                            searchedSculptures = searchedSculptures.OrderByDescending(s => s.Height).ToList();
+                            break;
+                    }
                 }
+                else
+                {
+                    switch (sortNum)
+                    {
+                        case 1:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Type).ToList();
+                            break;
+                        case 2:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Sculptor.Name).ToList();
+                            break;
+                        case 3:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Style.StyleName).ToList();
+                            break;
+                        case 4:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Location.LocationName).ToList();
+                            break;
+                        case 5:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Material).ToList();
+                            break;
+                        case 6:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Year).ToList();
+                            break;
+                        case 7:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Square).ToList();
+                            break;
+                        case 8:
+                            searchedSculptures = searchedSculptures.OrderBy(s => s.Height).ToList();
+                            break;
+                    }                    
+                }
+                ViewBag.SortOrder = sortOrder;
                 ViewBag.Checked = sortNum;
             }
             if (boxFilter != null && boxFilter.Length != 0)

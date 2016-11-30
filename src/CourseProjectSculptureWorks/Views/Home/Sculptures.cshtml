@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Скульптуры";
+    var sculpturesId = (int[])ViewBag.SculpturesId;
+    int count = 0;
 }
 
 <link rel="stylesheet" href="~/css/sculptures.css" />
@@ -10,7 +12,14 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/sculptures.js"></script>
 
-
+<div id="dash" style="position:fixed; font-size:xx-large; z-index: 101;">
+    <div class="modal-header">
+        <button type="button" id="close" style="color:white;" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <p class="modal-title" style="color:white;font-size:14px;"><b>Поиск: </b>@ViewBag.SearchString</p>
+    </div>
+    <a data-href="#1" class="btn btn-primary" id="step_back"> < </a>
+    <a data-href="#1" class="btn btn-primary" id="step_forward"> > </a>
+</div>
 <a asp-action="AddNewSculpture" class="addBtn"><span class="glyphicon glyphicon-plus"></span>   Добавить скульптуру</a>
 <a asp-action="Sculptures" class="btn btn-success">Показать все</a>
 <div class="features">
@@ -33,6 +42,10 @@
         </div>
         <div class="column" style="margin-left:220px; margin-top:-13px; width:200px;">
             <h4 style="margin-left:40px;">Сортировка</h4>
+            <select class="form-control" name="sortOrder" style="margin-bottom:5px;">
+                <option sortOrder="0" value="0">По возрастанию</option>
+                <option sortOrder="1" value="1">По убыванию</option>
+            </select>
             <select class="form-control" name="sortNum">
                 <option value="0">В исходном порядке</option>
                 <option value="1">По виду</option>
@@ -77,19 +90,40 @@
             </tr>
             @foreach (var sculpture in Model)
             {
-                <tr id="@sculpture.Id">
-                    <td>@sculpture.Name</td>
-                    <td>@sculpture.Type</td>
-                    <td><a style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
-                    <td><a style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
-                    <td><a style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
-                    <td>@sculpture.Material</td>
-                    <td>@sculpture.Year год</td>
-                    <td>@sculpture.Square м<sup>2</sup></td>
-                    <td>@sculpture.Height м</td>
-                    <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
-                </tr>
+                
+                if (sculpturesId != null && sculpturesId.Contains(sculpture.Id))
+                {
+                    <tr id="@sculpture.Id" name="@count">
+                        <td count="@count" id="@count" style="background:#98FB98;">@sculpture.Name</td>
+                        <td count="@count" style="background:#98FB98;">@sculpture.Type</td>
+                        <td count="@count" style="background:#98FB98;"><a style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
+                        <td count="@count" style="background:#98FB98;"><a style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
+                        <td count="@count" style="background:#98FB98;"><a style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
+                        <td count="@count" style="background:#98FB98;">@sculpture.Material</td>
+                        <td count="@count" style="background:#98FB98;">@sculpture.Year год</td>
+                        <td count="@count" style="background:#98FB98;">@sculpture.Square м<sup>2</sup></td>
+                        <td count="@count" style="background:#98FB98;">@sculpture.Height м</td>
+                        <td count="@count" style="background:#98FB98;"><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td count="@count" style="background:#98FB98;"><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                    count++;
+                }
+                else
+                {
+                    <tr id="@sculpture.Id">
+                        <td>@sculpture.Name</td>
+                        <td>@sculpture.Type</td>
+                        <td><a style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
+                        <td><a style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
+                        <td><a style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
+                        <td>@sculpture.Material</td>
+                        <td>@sculpture.Year год</td>
+                        <td>@sculpture.Square м<sup>2</sup></td>
+                        <td>@sculpture.Height м</td>
+                        <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
             }
         </table>
     }
@@ -99,13 +133,22 @@
     }
 </div>
 
-
+@if (sculpturesId != null && sculpturesId.Length != 0)
+{
+    <script>
+        $("#dash").show();
+        var searchCount = @sculpturesId.Length;
+        $("table").attr("searchCount", "" + searchCount);
+    </script>
+}
 
 @if (ViewBag.Checked != 0)
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("option[value=" + checkedNum + "]").attr("selected", true);
+        $("option[sortOrder=" + sortOrder + "]").attr("selected", true);
     </script>
 }
 

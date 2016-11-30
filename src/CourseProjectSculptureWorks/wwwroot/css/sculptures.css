@@ -47,3 +47,12 @@ h4
 {
     display:inline-table;
 }
+
+#dash
+{
+    background: rgba(0,0,0,0.8);
+    margin-top:20px;
+    right:20px;
+    padding:25px;
+    display:none;
+}
