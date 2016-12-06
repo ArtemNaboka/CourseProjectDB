@@ -448,8 +448,9 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
         [HttpGet]
-        public IActionResult CreateNewStyle()
+        public IActionResult CreateNewStyle(string backAction)
         {
+            ViewBag.BackAction = backAction;
             return View();
         }
 
@@ -590,14 +591,8 @@ namespace CourseProjectSculptureWorks.Controllers
 
         #region TransferController
 
-        public IActionResult Transfers()
+        public IActionResult Transfers(string searchString = null, int sortOrder = 0, int sortNum = 0)
         {
-            //var transfers = await _db.Transfers.Include(t => t.StartLocation)
-            //                                    .Include(t => t.FinishLocation)
-            //                                    .Where(t => t.StartLocation.City == city
-            //                                    && t.FinishLocation.City == city)
-            //                                    .ToListAsync();
-
             var resultList = new List<Transfer>();
             foreach(var transfer in _db.Transfers.Include(t => t.StartLocation).Include(t => t.FinishLocation))
             {
@@ -607,6 +602,37 @@ namespace CourseProjectSculptureWorks.Controllers
                     resultList.Add(transfer);
                 }
             }
+
+            if(searchString != null && searchString.Length != 0)
+            {
+                ViewBag.SearchIds = resultList.Where(t => t.StartLocation.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
+                                            || t.FinishLocation.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower()))
+                                            .Select(t => t.StartLocationId.ToString() + t.FinishLocationId.ToString())
+                                            .ToList();
+                ViewBag.SearchString = searchString;
+            }
+
+            if(sortOrder == 0)
+            {
+                if (sortNum != 0)
+                {
+                    switch (sortNum)
+                    {
+                        case 1:
+                            resultList = resultList.OrderBy(t => t.Duration).ToList();
+                            break;
+                        case 2:
+                            resultList = resultList.OrderBy(t => t.StartLocation.LocationName).ToList();
+                            break;
+                        case 3:
+                            resultList = resultList.OrderBy(t => t.FinishLocation.LocationName).ToList();
+                            break;
+                    }
+                    ViewBag.Checked = sortNum;
+                    ViewBag.SortOrder = sortOrder;
+                }
+            }
+
             return View(resultList);
         }
 

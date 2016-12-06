@@ -34,36 +34,39 @@
     <div class="form-group">
         <label asp-for="SculptorId" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <select asp-for="SculptorId" class="form-control">
+            <select style="display:inline-table;" asp-for="SculptorId" class="form-control">
                 @foreach(var sculptor in db.Sculptors.ToList())
                 {
                     <option value="@sculptor.SculptorId">@sculptor.Name</option>
                 }
             </select>
+            <a asp-action="AddNewSculptor" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить скульптора" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
             <span asp-validation-for="SculptorId" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="StyleId" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <select asp-for="StyleId" class="form-control">
+            <select style="display:inline-table;" asp-for="StyleId" class="form-control">
                 @foreach (var style in db.Styles.ToList())
                 {
                     <option value="@style.StyleId">@style.StyleName</option>
                 }
             </select>
+            <a asp-action="CreateNewStyle" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить стиль" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
             <span asp-validation-for="StyleId" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="LocationId" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <select asp-for="LocationId" class="form-control">
+            <select style="display:inline-table;" asp-for="LocationId" class="form-control">
                 @foreach (var location in db.Locations.ToList())
                 {
                     <option value="@location.LocationId">@location.LocationName</option>
                 }
             </select>
+            <a asp-action="AddNewLocation" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить новое местоположение" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
             <span asp-validation-for="LocationId" class="text-danger"></span>
         </div>
     </div>
