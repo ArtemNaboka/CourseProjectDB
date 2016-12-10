@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Виды экскурсий";
+    int[] typesId = (int[])ViewBag.TypesId;
 }
 
 <link rel="stylesheet" href="~/css/exursionTypes.css" />
@@ -12,13 +13,25 @@
 
 
 <div class="features column">
-    <form method="get" class="form-horizontal">
-        <input class="form-control" name="searchString" type="text" placeholder="Название вида..." value="@ViewBag.SearchString" />
+    <a style="width:100%;" asp-action="ExcursionTypes" class="btn btn-success">Показать все</a>
+    <form method="get" class="form-horizontal" style="margin-top:45px;">
+        <select class="form-control" name="searchCriteria">
+            <option criteria="0" value="0">По всем параметрам</option>
+            <option criteria="1" value="1">По названию</option>
+            <option criteria="2" value="2">По скидке</option>
+            <option criteria="3" value="3">По минимальному кол-ву людей</option>
+            <option criteria="4" value="4">По максимальному кол-ву людей</option>
+        </select>
+        <input style="margin-top:15px;" class="form-control" name="searchString" type="text" placeholder="Название вида..." value="@ViewBag.SearchString" />
         <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
         <div>
             <h4>
                 Сортировка
             </h4>
+            <select name="sortOrder" class="form-control">
+                <option sortOrder="0" value="0">По возростанию</option>
+                <option sortOrder="1" value="1">По убыванию</option>
+            </select>
             <div class="radio">
                 <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
             </div>
@@ -51,14 +64,28 @@
             </tr>
             @foreach (var excursionType in Model)
             {
-                <tr id="@excursionType.ExcursionTypeId">
-                    <td>@excursionType.NameOfType</td>
-                    <td>@excursionType.Discount %</td>
-                    <td>@excursionType.MinNumberOfPeople чел</td>
-                    <td>@excursionType.MaxNumberOfPeople чел</td>
-                    <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditExcursionType" asp-route-excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td><a title="Удалить" style="color:crimson;" class="del" excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-trash"></span></a></td>
-                </tr>
+                if (typesId != null && typesId.Contains(excursionType.ExcursionTypeId))
+                {
+                    <tr id="@excursionType.ExcursionTypeId">
+                        <td style="background:#98FB98;">@excursionType.NameOfType</td>
+                        <td style="background:#98FB98;">@excursionType.Discount %</td>
+                        <td style="background:#98FB98;">@excursionType.MinNumberOfPeople чел</td>
+                        <td style="background:#98FB98;">@excursionType.MaxNumberOfPeople чел</td>
+                        <td style="background:#98FB98;"><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditExcursionType" asp-route-excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td style="background:#98FB98;"><a title="Удалить" style="color:crimson;" class="del" excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr id="@excursionType.ExcursionTypeId">
+                        <td>@excursionType.NameOfType</td>
+                        <td>@excursionType.Discount %</td>
+                        <td>@excursionType.MinNumberOfPeople чел</td>
+                        <td>@excursionType.MaxNumberOfPeople чел</td>
+                        <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditExcursionType" asp-route-excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a title="Удалить" style="color:crimson;" class="del" excursionTypeId="@excursionType.ExcursionTypeId"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                }
             }
         </table>
     }
@@ -73,6 +100,16 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("input[value=" + checkedNum + "]").attr("checked", true);
+        $("option[sortOrder=" + sortOrder +"]").attr("selected", true);
+    </script>
+}
+
+@if (ViewBag.SearchCriteria != 0)
+{
+    <script>
+        var searchCriteria = @ViewBag.SearchCriteria;
+        $("option[criteria=" + searchCriteria +"]").attr("selected", true);
     </script>
 }

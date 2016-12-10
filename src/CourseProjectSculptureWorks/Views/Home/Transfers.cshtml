@@ -62,7 +62,7 @@
                 {
                     if (ViewBag.SearchIds != null && ViewBag.SearchIds.Contains(transfer.StartLocationId.ToString() + transfer.FinishLocationId.ToString()))
                     {
-                        <tr id="">
+                        <tr id="@transfer.StartLocationId + @transfer.FinishLocationId">
                             <td style="background:#98FB98;">@transfer.StartLocation.LocationName</td>
                             <td style="background:#98FB98;">@transfer.FinishLocation.LocationName</td>
                             <td style="background:#98FB98;">@transfer.Duration мин</td>
@@ -72,7 +72,7 @@
                                 </a>
                             </td>
                             <td style="background:#98FB98;">
-                                <a style="color:crimson;" class="del">
+                                <a startLocationId="@transfer.StartLocationId" finishLocationId="@transfer.FinishLocationId" style="color:crimson;" class="del">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </a>
                             </td>
@@ -80,7 +80,7 @@
                     }
                     else
                     {
-                        <tr id="">
+                        <tr id="@(transfer.StartLocationId + "" + transfer.FinishLocationId)">
                             <td>@transfer.StartLocation.LocationName</td>
                             <td>@transfer.FinishLocation.LocationName</td>
                             <td>@transfer.Duration мин</td>
@@ -90,7 +90,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a style="color:crimson;" class="del">
+                                <a startLocationId="@transfer.StartLocationId" finishLocationId="@transfer.FinishLocationId" style="color:crimson;" class="del">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </a>
                             </td>

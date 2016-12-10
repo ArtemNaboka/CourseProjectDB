@@ -37,13 +37,13 @@ namespace CourseProjectSculptureWorks.Controllers
             }
 
             /////////////////////////////////////////////
-            var new_lists = new List<List<Location>>();
-            foreach(var list in resultList)
-            {
-                var tempPerm = getPer(list);
-                if (tempPerm.Locations.Select(l => l.DurationOfExcursion).Sum() + tempPerm.Duration <= minutesForExcursions)
-                    new_lists.Add(list);
-            }
+            //var new_lists = new List<List<Location>>();
+            //foreach(var list in resultList)
+            //{
+            //    var tempPerm = getPer(list);
+            //    if (tempPerm.Locations.Select(l => l.DurationOfExcursion).Sum() + tempPerm.Duration <= minutesForExcursions)
+            //        new_lists.Add(list);
+            //}
             //////////////////////////////////////////////
 
             ViewBag.ExcursionType = _db.ExcursionTypes.Single(e => e.ExcursionTypeId == excursionTypeId);
@@ -51,8 +51,6 @@ namespace CourseProjectSculptureWorks.Controllers
             ViewBag.Time = minutesForExcursions;
             return View(resultList);
         }
-
-
 
         [HttpPost]
         public IActionResult AddExcursions(int? numberOfPeople, int? typeOfExcursions, 
@@ -142,35 +140,5 @@ namespace CourseProjectSculptureWorks.Controllers
             return new ListDurationViewModel(lists[minIndex], durations.Min());
         }
 
-
-
-        //private List<Location> getArranging(List<Location> list)
-        //{
-        //    List<List<Location>> prev, cur;
-        //    Location el;
-        //    int length = list.Count;
-
-        //    cur = new List<List<Location>>()
-        //    {
-        //        new List<Location> { list[0] }
-        //    };
-
-        //    for(int i = 1; i < length; i++)
-        //    {
-        //        el = list[i];
-        //        prev = cur;
-        //        cur = new List<List<Location>>();
-
-        //        prev.ForEach(l => cur = cur.Union(makeArr(l, el)).ToList());
-        //    }
-
-        //    return cur[0];
-        //}
-
-
-        //private List<List<Location>> makeArr(List<Location> list, Location el)
-        //{
-        //    return null;
-        //}
     }
 }

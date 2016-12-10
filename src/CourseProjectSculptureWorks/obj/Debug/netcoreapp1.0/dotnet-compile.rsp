@@ -224,6 +224,7 @@
 --reference:C:\Users\ПК\.nuget\packages\System.Xml.ReaderWriter\4.0.11\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\ПК\.nuget\packages\System.Xml.XDocument\4.0.11\ref\netstandard1.3\System.Xml.XDocument.dll
 --resource:"C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\obj\Debug\netcoreapp1.0\CourseProjectSculptureWorksdotnet-compile.deps.json",CourseProjectSculptureWorks.deps.json
+C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Locations.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Program.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Startup.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Controllers\AccountController.cs
@@ -273,10 +274,6 @@ C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Sculpture.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Style.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\Entities\Transfer.cs
-C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\GraphModel\Edge.cs
-C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\GraphModel\Graph.cs
-C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\GraphModel\PriorityQ.cs
-C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\GraphModel\Vertex.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\AddPhoneNumberViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\ChangePasswordViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ManageViewModels\ConfigureTwoFactorViewModel.cs
@@ -289,9 +286,11 @@ C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ReportsViewModels\ConductedExcursionViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ReportsViewModels\WorksOfSculptorViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\SalesmanModel\Graph.cs
+C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\SalesmanModel\ListDurationViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\SalesmanModel\Vertex.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\StatisticsViewModels\NumberOfSculpturesForCertainTimeViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\StatisticsViewModels\StylePopularityViewModel.cs
+C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\DoubleIntegerModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\ExcursionsViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\ExcursionViewModel.cs
 C:\Users\ПК\Documents\Visual Studio 2015\Projects\CourseProjectSculptureWorks\src\CourseProjectSculptureWorks\Models\ViewModels\IntegerModel.cs

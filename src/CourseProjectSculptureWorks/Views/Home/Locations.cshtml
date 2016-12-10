@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Местоположения";
+    int[] locationsId = (int[])ViewBag.LocationsId;
 }
 
 <link rel="stylesheet" href="~/css/locations.css" />
@@ -10,6 +11,7 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/locations.js"></script>
 <a asp-action="AddNewLocation" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить местоположение</a>
+<a asp-action="Locations" class="btn btn-success">Показать все</a>
 <br />
 <div class="column features">
     <form method="get" class="form-horizontal" style="margin:40px 20px;">
@@ -17,14 +19,25 @@
             <h4>
                 Поиск
             </h4>
-            <input class="form-control" name="searchString" type="text" placeholder="Название, цена, длительность" value="@ViewBag.SearchString" />
+            <select name="searchCriteria" class="form-control">
+                <option criteria="0"  value="0">По всем параметрам</option>
+                <option criteria="1" value="1">По названию</option>
+                <option criteria="2" value="2">По стране/городу/адресу</option>
+                <option criteria="3" value="3">По цене экскурсии</option>
+                <option criteria="4" value="4">По длительности экскурсии</option>
+            </select>
+            <input style="margin-top:10px;" class="form-control" name="searchString" type="text" placeholder="Название, цена, длительность" value="@ViewBag.SearchString" />
             <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
         </div>
         <div class="col" style="display:inline-table;margin-left:20%;">
             <h4>
                 Сортировка
             </h4>
-            <select class="form-control" name="sortNum">
+            <select class="form-control" name="sortOrder">
+                <option sortOrder="0" value="0">По возростанию</option>
+                <option sortOrder="1" value="1">По убыванию</option>
+            </select>
+            <select style="margin-top:10px;" class="form-control" name="sortNum">
                 <option value="0">В исходном порядке</option>
                 <option value="1">По виду</option>
                 <option value="2">По стране</option>
@@ -67,15 +80,30 @@
                 </tr>
                 @foreach (var location in Model)
                 {
-                    <tr id="@location.LocationId">
-                        <td>@location.LocationName</td>
-                        <td>@location.LocationType</td>
-                        <td>@location.Country, @location.City,<br />@location.Address</td>
-                        <td>@location.PriceForPerson UAN</td>
-                        <td>@location.DurationOfExcursion мин</td>
-                        <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation" asp-route-locationId="@location.LocationId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a style="color:crimson;" class="del" locationId="@location.LocationId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
-                    </tr>
+                    if (locationsId != null && locationsId.Contains(location.LocationId))
+                    {
+                        <tr id="@location.LocationId">
+                            <td style="background:#98FB98;">@location.LocationName</td>
+                            <td style="background:#98FB98;">@location.LocationType</td>
+                            <td style="background:#98FB98;">@location.Country, @location.City,<br />@location.Address</td>
+                            <td style="background:#98FB98;">@location.PriceForPerson UAN</td>
+                            <td style="background:#98FB98;">@location.DurationOfExcursion мин</td>
+                            <td style="background:#98FB98;"><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation" asp-route-locationId="@location.LocationId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td style="background:#98FB98;"><a style="color:crimson;" class="del" locationId="@location.LocationId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr id="@location.LocationId">
+                            <td>@location.LocationName</td>
+                            <td>@location.LocationType</td>
+                            <td>@location.Country, @location.City,<br />@location.Address</td>
+                            <td>@location.PriceForPerson UAN</td>
+                            <td>@location.DurationOfExcursion мин</td>
+                            <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditLocation" asp-route-locationId="@location.LocationId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td><a style="color:crimson;" class="del" locationId="@location.LocationId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
                 }
             </table>
         }
@@ -90,7 +118,9 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("option[value=" + checkedNum + "]").attr("selected", true);
+        $("option[sortOrder=" + sortOrder + "]").attr("selected", true);
     </script>
 }
 
@@ -103,5 +133,13 @@
             $("input[flag=" + scriptFilter + "]").attr("checked", true);
         </script>
     }
+}
+
+@if(ViewBag.SearchCriteria != null)
+{
+    <script>
+        var searchCriteria = @ViewBag.SearchCriteria;
+        $("option[criteria=" + searchCriteria + "]").attr("selected", true);
+    </script>
 }
 

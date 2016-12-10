@@ -15,12 +15,21 @@
     <a style="width:100%;" class="btn btn-success" asp-action="Styles">Показать все</a><br />
     <form style="margin-top:20px;" method="get" class="form-horizontal">
         <h4>Поиск</h4>
+        <select name="searchCriteria" class="form-control">
+            <option value="0">По всем параметрам</option>
+            <option value="1">По названию</option>
+            <option value="2">по стране</option>
+        </select><br />
         <input class="form-control" name="searchString" type="text" placeholder="Название стиля, страна" value="@ViewBag.SearchString" />
         <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
     <div>
         <h4>
             Сортировка
         </h4>
+        <select class="form-control" name="sortOrder">
+            <option sortOrder="0" value="0">По возростанию</option>
+            <option sortOrder="1" value="1">По убыванию</option>
+        </select>
             <div class="radio">
                 <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
             </div>
@@ -67,13 +76,26 @@
 
                 @foreach (var style in Model)
                 {
-                    <tr id="@style.StyleId">
-                        <td>@style.StyleName</td>
-                        <td>@style.Era</td>
-                        <td>@style.Country</td>
-                        <td><a title="Редактировать"  style="color:cornflowerblue;" asp-action="EditStyle" asp-route-styleId="@style.StyleId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a class="del" style="color:crimson;" styleId="@style.StyleId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
-                    </tr>
+                    if (ViewBag.StyleIds != null && ViewBag.StyleIds.Contains(style.StyleId))
+                    {
+                        <tr id="@style.StyleId">
+                            <td style="background:#98FB98;">@style.StyleName</td>
+                            <td style="background:#98FB98;">@style.Era</td>
+                            <td style="background:#98FB98;">@style.Country</td>
+                            <td style="background:#98FB98;"><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditStyle" asp-route-styleId="@style.StyleId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td style="background:#98FB98;"><a class="del" style="color:crimson;" styleId="@style.StyleId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr id="@style.StyleId">
+                            <td>@style.StyleName</td>
+                            <td>@style.Era</td>
+                            <td>@style.Country</td>
+                            <td><a title="Редактировать"  style="color:cornflowerblue;" asp-action="EditStyle" asp-route-styleId="@style.StyleId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td><a class="del" style="color:crimson;" styleId="@style.StyleId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
                 }
             </table>
         }
@@ -89,7 +111,9 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("input[value=" + checkedNum + "]").attr("checked", true);
+        $("option[sortOrder=" + sortOrder + "]").attr("selected", true);
     </script>
 }
 
@@ -102,4 +126,13 @@
             $("input[flag=" + scriptFilter + "]").attr("checked", true);
         </script>
     }
+}
+
+
+@if(ViewBag.SearchCriteria != 0)
+{
+    <script>
+        var searchCriteria = @ViewBag.SearchCriteria;
+        $("option[value=" + searchCriteria + "]").attr("selected", true);
+    </script>
 }

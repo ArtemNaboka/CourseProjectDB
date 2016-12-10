@@ -6,16 +6,16 @@
 
 @{
     ViewData["Title"] = "Экскурсии";
+    int[] excursionsId = (int[])ViewBag.ExcursionsId;
 }
 
 <link rel="stylesheet" href="~/css/tableStyles.css" />
 <link rel="stylesheet" href="~/css/excursions.css" />
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/excursions.js"></script>
-<a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсию</a>
-<a asp-action="AddNewExcursions" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсии</a>
-<br />
-<a style="margin-left:40px;" class="btn btn-success" asp-action="Excursions">Показать все</a>
+@*<a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсию</a>*@
+<a style="margin-left:40px;" asp-action="AddNewExcursions" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсии</a>
+<a style="margin-left:20px;" class="btn btn-success" asp-action="Excursions">Показать все</a>
 <br />
 <div class="column features">
     <form asp-action="Excursions" method="get">
@@ -35,6 +35,10 @@
         </div>
         <div style="display:inline-table;margin-left:200px;">
             <h4 style="margin-left:40px;">Сортировка</h4>
+            <select class="form-control" name="sortOrder" style="margin-bottom:5px;">
+                <option sortOrder="0" value="0">По возростанию</option>
+                <option sortOrder="1" value="1">По убыванию</option>
+            </select>
             <select class="form-control" name="sortNum">
                 <option value="0">В исходном порядке</option>
                 <option value="1">По тематике</option>
@@ -66,44 +70,88 @@
                 </tr>
                 @foreach (var excursion in Model)
                 {
-                    var locations = new List<Location>();
-                    foreach (var composition in excursion.Compositions)
+                    if (excursionsId != null && excursionsId.Contains(excursion.ExcursionId))
                     {
-                        locations.Add(db.Locations.Single(l => l.LocationId == composition.LocationId));
+                        var locations = new List<Location>();
+                        foreach (var composition in excursion.Compositions)
+                        {
+                            locations.Add(db.Locations.Single(l => l.LocationId == composition.LocationId));
+                        }
+                        <tr id="@excursion.ExcursionId">
+                            <td style="background:#98FB98;">@excursion.ExcursionId</td>
+                            <td style="background:#98FB98;">@excursion.Subjects</td>
+                            <td style="background:#98FB98;">@excursion.DateOfExcursion.Date.Day.@excursion.DateOfExcursion.Date.Month.@excursion.DateOfExcursion.Date.Year</td>
+                            <td style="background:#98FB98;">@excursion.ExcursionType.NameOfType</td>
+                            <td style="background:#98FB98;">
+                                @foreach (var location in locations)
+                                {
+                                    <p>@location.LocationName</p>
+                                }
+                            </td>
+                            <td style="background:#98FB98;">@excursion.NumberOfPeople чел.</td>
+                            <td style="background:#98FB98;">@excursion.PriceOfExcursion UAN</td>
+                            <td style="background:#98FB98;">
+                                @if (locations.Count == 1)
+                                {
+                                    <a style="color:cornflowerblue;" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursion">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a style="color:cornflowerblue;" multi="false" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursions">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                }
+                            </td>
+                            <td style="background:#98FB98;">
+                                <a style="color:crimson;" multi="true" class="del" excursionId="@excursion.ExcursionId" title="Удалить">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
                     }
-                    <tr id="@excursion.ExcursionId">
-                        <td>@excursion.ExcursionId</td>
-                        <td>@excursion.Subjects</td>
-                        <td>@excursion.DateOfExcursion.Date.Day.@excursion.DateOfExcursion.Date.Month.@excursion.DateOfExcursion.Date.Year</td>
-                        <td>@excursion.ExcursionType.NameOfType</td>
-                        <td>
-                            @foreach(var location in locations)
-                            {
-                                <p>@location.LocationName</p>
-                            }
-                        </td>
-                        <td>@excursion.NumberOfPeople чел.</td>
-                        <td>@excursion.PriceOfExcursion UAN</td>
-                        <td>
-                            @if (locations.Count == 1)
-                            {
-                                <a style="color:cornflowerblue;" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursion">
-                                    <span class="glyphicon glyphicon-pencil"></span>
+                    else
+                    {
+                        var locations = new List<Location>();
+                        foreach (var composition in excursion.Compositions)
+                        {
+                            locations.Add(db.Locations.Single(l => l.LocationId == composition.LocationId));
+                        }
+                        <tr id="@excursion.ExcursionId">
+                            <td>@excursion.ExcursionId</td>
+                            <td>@excursion.Subjects</td>
+                            <td>@excursion.DateOfExcursion.Date.Day.@excursion.DateOfExcursion.Date.Month.@excursion.DateOfExcursion.Date.Year</td>
+                            <td>@excursion.ExcursionType.NameOfType</td>
+                            <td>
+                                @foreach (var location in locations)
+                                {
+                                    <p>@location.LocationName</p>
+                                }
+                            </td>
+                            <td>@excursion.NumberOfPeople чел.</td>
+                            <td>@excursion.PriceOfExcursion UAN</td>
+                            <td>
+                                @if (locations.Count == 1)
+                                {
+                                    <a style="color:cornflowerblue;" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursion">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a style="color:cornflowerblue;" multi="false" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursions">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <a style="color:crimson;" multi="true" class="del" excursionId="@excursion.ExcursionId" title="Удалить">
+                                    <span class="glyphicon glyphicon-trash"></span>
                                 </a>
-                            }
-                            else
-                            {
-                                <a style="color:cornflowerblue;" multi="false" title="Редактировать" asp-route-excursionId="@excursion.ExcursionId" asp-action="EditExcursions">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </a>
-                            }
-                        </td>
-                        <td>
-                            <a style="color:crimson;" multi="true" class="del" excursionId="@excursion.ExcursionId" title="Удалить">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    }
                 }
             </table>
         }
@@ -119,7 +167,9 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("option[value=" + checkedNum + "]").attr("selected", true);
+        $("option[sortOrder=" + checkedNum + "]").attr("selected", true);
     </script>
 }
 

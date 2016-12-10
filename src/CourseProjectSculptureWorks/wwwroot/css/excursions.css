@@ -26,8 +26,15 @@ a.addBtn {
 a.addBtn:hover { background: rgba(255, 69, 0,.2); }
 a.addBtn:active { background: rgba(255, 69, 0,.2); }
 
+
+
 .features
 {
-    margin-left: 20px;
+    background: #ededed;
+    margin: 20px -15px 20px 40px;
+    padding: 20px 40px;
+    box-shadow: 0 1px 2px #d1d1d1;
+    width:93%;
+    height:200px;
 }
 

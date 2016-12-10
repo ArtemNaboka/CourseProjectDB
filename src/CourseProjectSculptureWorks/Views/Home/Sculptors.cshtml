@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Скульпторы";
+    var sculptorsId = (int[])ViewBag.SculptorsId;
 }
 
 
@@ -14,20 +15,25 @@
 <div class="column features">
     <a class="btn btn-warning" asp-action="Sculptors" style="width:100%;">Показать все</a>
     <form method="get" class="form-horizontal" style="margin-top:40px;">
+        <h4>Поиск</h4>
         <select class="form-control searchSelect" name="searchCriteria">
-            <option value="0" disabled selected>Критерий поиска</option>
+            <option value="0">По всем параметрам</option>
             <option value="1">Имя</option>
             <option value="2">Страна</option>
             <option value="3">Год рождения</option>
             <option value="4">Год смерти</option>
         </select>
         <br />
-        <input class="form-control" name="searchString" type="text" placeholder="Имя, страна, годы жизни..." value="@ViewBag.SearchString" disabled />
+        <input class="form-control" name="searchString" type="text" placeholder="Имя, страна, годы жизни..." value="@ViewBag.SearchString" />
         <input style="width:100%; margin-top:5px;" type="submit" value="Поиск" class="btn btn-info" />
         <div><br />
             <h4>
                 Сортировать
             </h4>
+        <select class="form-control" name="sortOrder">
+            <option value="0" sortOrder="0">По возростанию</option>
+            <option value="1" sortOrder="1">По убыванию</option>
+        </select>
             <div class="radio">
                 <label><input type="radio" name="sortNum" value="0" checked>В исходном порядке</label>
             </div>           
@@ -58,24 +64,48 @@
                 </tr>
                 @foreach (var sculptor in Model)
                 {
-                    <tr id="@sculptor.SculptorId">
-                        <td>@sculptor.Name</td>
-                        <td>@sculptor.Country</td>
-                        <td>@sculptor.YearOfBirth год</td>
-                        <td>
-                            @if(sculptor.YearOfDeath != null)
-                            {
-                                <span>@sculptor.YearOfDeath год</span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td><a asp-controller="Report" asp-action="WorksOfSculptorReport" asp-route-sculptorId="@sculptor.SculptorId" class="glyphicon glyphicon-save" title="Скачать отчет"></a></td>
-                        <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a class="del" style="color:crimson;" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
-                    </tr>
+                    if (ViewBag.SculptorsId != null && sculptorsId.Contains(sculptor.SculptorId))
+                    {
+                        <tr id="@sculptor.SculptorId">
+                            <td style="background:#98FB98;">@sculptor.Name</td>
+                            <td style="background:#98FB98;">@sculptor.Country</td>
+                            <td style="background:#98FB98;">@sculptor.YearOfBirth год</td>
+                            <td style="background:#98FB98;">
+                                @if (sculptor.YearOfDeath != null)
+                                {
+                                    <span>@sculptor.YearOfDeath год</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td style="background:#98FB98;"><a asp-controller="Report" asp-action="WorksOfSculptorReport" asp-route-sculptorId="@sculptor.SculptorId" class="glyphicon glyphicon-save" title="Скачать отчет"></a></td>
+                            <td style="background:#98FB98;"><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td style="background:#98FB98;"><a class="del" style="color:crimson;" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr id="@sculptor.SculptorId">
+                            <td>@sculptor.Name</td>
+                            <td>@sculptor.Country</td>
+                            <td>@sculptor.YearOfBirth год</td>
+                            <td>
+                                @if (sculptor.YearOfDeath != null)
+                                {
+                                    <span>@sculptor.YearOfDeath год</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td><a asp-controller="Report" asp-action="WorksOfSculptorReport" asp-route-sculptorId="@sculptor.SculptorId" class="glyphicon glyphicon-save" title="Скачать отчет"></a></td>
+                            <td><a style="color:cornflowerblue;" title="Редактировать" asp-action="EditSculptor" asp-route-sculptorId="@sculptor.SculptorId"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            <td><a class="del" style="color:crimson;" sculptorId="@sculptor.SculptorId" title="Удалить"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        </tr>
+                    }
                 }
             </table>
         }
@@ -90,7 +120,9 @@
 {
     <script>
         var checkedNum = @ViewBag.Checked;
+        var sortOrder = @ViewBag.SortOrder;
         $("input[value=" + checkedNum + "]").attr("checked", true);
+        $("option[sortOrder=" + sortOrder + "]").attr("selected", true);
     </script>
 }
 
@@ -99,10 +131,8 @@
     <script>
         var searchedCriteria = "@ViewBag.SearchCriteria";
         $("option[value=" + searchedCriteria +"]").attr("selected", true);
-        if(searchedCriteria != "0")
-        {
-            $("input[name=searchString]").removeAttr("disabled");
-        }
     </script>
 }
+
+
 
