@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using CourseProjectSculptureWorks.Data;
 using CourseProjectSculptureWorks.Models.Entities;
 using CourseProjectSculptureWorks.Models.SalesmanModel;
+using CourseProjectSculptureWorks.Models.ViewModels;
 
 namespace CourseProjectSculptureWorks.Controllers
 {
@@ -19,7 +20,7 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
-        public IActionResult CombinationsOfExcursions(string city, int minutesForExcursions,
+        public IActionResult CombinationsOfExcursions(string subjects, DateTime? date, string city, int minutesForExcursions,
                                                         int excursionTypeId, int numberOfpeople)
         {
             var locationsInCity = getCombination(_db.Locations
@@ -37,28 +38,71 @@ namespace CourseProjectSculptureWorks.Controllers
             }
 
             /////////////////////////////////////////////
-            //var new_lists = new List<List<Location>>();
-            //foreach(var list in resultList)
-            //{
-            //    var tempPerm = getPer(list);
-            //    if (tempPerm.Locations.Select(l => l.DurationOfExcursion).Sum() + tempPerm.Duration <= minutesForExcursions)
-            //        new_lists.Add(list);
-            //}
+            var new_lists = new List<ListDurationViewModel>();
+            foreach (var list in resultList)
+            {
+                var tempPerm = getMin(getPermutations(list, list.Count));
+                if (tempPerm.Locations.Select(l => l.DurationOfExcursion).Sum() + tempPerm.Duration <= minutesForExcursions)
+                    new_lists.Add(tempPerm);
+            }
             //////////////////////////////////////////////
 
             ViewBag.ExcursionType = _db.ExcursionTypes.Single(e => e.ExcursionTypeId == excursionTypeId);
             ViewBag.NumberOfPeople = numberOfpeople;
             ViewBag.Time = minutesForExcursions;
-            return View(resultList);
+            ViewBag.City = city;
+            ViewBag.Subjects = subjects;
+            ViewBag.Date = date; 
+
+            return View(new_lists);
         }
 
         [HttpPost]
-        public IActionResult AddExcursions(int? numberOfPeople, int? typeOfExcursions, 
-                                            DateTime? date, Location[] locations)
+        public IActionResult AddExcursions(string subjects, int? numberOfPeople, int? typeOfExcursions, 
+                                            string date, [FromForm]int[] locationsId)
         {
-            if (locations == null)
-                throw new Exception("GG WP");
-            return View();
+            ExcursionsViewModel model = new ExcursionsViewModel
+            {
+                DateOfExcursion = Convert.ToDateTime(date),
+                ExcursionTypeId = typeOfExcursions.Value,
+                LocationsId = locationsId,
+                NumberOfPeople = numberOfPeople.Value,
+                Subjects = subjects
+            };
+
+            var locations = new List<Location>();
+            foreach (var location_id in locationsId)
+                locations.Add(_db.Locations
+                    .Single(l => l.LocationId == location_id));
+            var excursionType = _db.ExcursionTypes
+                .Single(e => e.ExcursionTypeId == model.ExcursionTypeId);
+            var excursion = new Excursion
+            {
+                Subjects = model.Subjects,
+                DateOfExcursion = model.DateOfExcursion,
+                ExcursionType = excursionType,
+                NumberOfPeople = model.NumberOfPeople,
+                PriceOfExcursion = locations.Select(l => l.PriceForPerson)
+                    .Sum()
+                    * model.NumberOfPeople *
+                    (1 - excursionType.Discount / 100)
+            };
+            _db.Excursions.Add(excursion);
+            _db.SaveChanges();
+
+            foreach (var location_id in locationsId)
+            {
+                _db.Compositions.Add(new Composition
+                {
+                    ExcursionId = excursion.ExcursionId,
+                    LocationId = location_id,
+                    Excursion = excursion,
+                    Location = _db.Locations
+                        .Single(l => l.LocationId == location_id)
+                });
+            }
+            _db.SaveChanges();
+            return RedirectToAction("Excursions", "Home");
         }
 
         private List<List<Location>> getCombination(List<Location> list)
@@ -83,43 +127,21 @@ namespace CourseProjectSculptureWorks.Controllers
 
 
 
-        private void swap(Location a, Location b)
+        private List<List<Location>> getPermutations(List<Location> list, int length)
         {
-            if (a == b) return;
+            if(length == 1)
+                return list.Select(t => new List<Location>() { t }).ToList();
 
-            var tempLocation = a;
-            a = b;
-            b = tempLocation;
+            return getPermutations(list, length - 1)
+                    .SelectMany(t => list.Where(e => !t.Contains(e)), (t1, t2) => t1.Concat(new List<Location> { t2 }).ToList())
+                    .ToList();
         }
 
-        private ListDurationViewModel getPer(List<Location> list)
-        {
-            int x = list.Count - 1;
-            var locationList = new List<List<Location>>();
-            getPer(locationList, list, 0, x);
-            return getMin(locationList);
-        }
-
-
-        private void getPer(List<List<Location>> locationsList, List<Location> list, int k, int m)
-        {
-            if (k == m)
-            {
-                Console.WriteLine(list);
-            }
-            else
-                for (int i = k; i <= m; i++)
-                {
-                    swap(list[k], list[i]);
-                    getPer(locationsList, list, k + 1, m);
-                    swap(list[k], list[i]);
-                }
-        }
 
 
         private ListDurationViewModel getMin(List<List<Location>> lists)
         {
-            int[] durations = new int[lists[0].Count];
+            int[] durations = new int[lists.Count];
             int count = 0;
             foreach(var list in lists)
             {
@@ -139,6 +161,7 @@ namespace CourseProjectSculptureWorks.Controllers
             var minIndex = Array.IndexOf(durations, durations.Min());
             return new ListDurationViewModel(lists[minIndex], durations.Min());
         }
+
 
     }
 }

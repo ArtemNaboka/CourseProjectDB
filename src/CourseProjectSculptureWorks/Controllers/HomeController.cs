@@ -1015,6 +1015,15 @@ namespace CourseProjectSculptureWorks.Controllers
             {
                 _db.Transfers.Update(transfer);
                 await _db.SaveChangesAsync();
+
+                var sameTransfer = _db.Transfers
+                    .Single(t => t.StartLocationId == transfer.FinishLocationId
+                    && t.FinishLocationId == transfer.StartLocationId);
+
+
+                sameTransfer.Duration = transfer.Duration;
+                await _db.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Transfers));
             }
             return View(transfer);

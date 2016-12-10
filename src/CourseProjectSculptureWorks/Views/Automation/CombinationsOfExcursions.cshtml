@@ -1,13 +1,16 @@
-﻿@using CourseProjectSculptureWorks.Models.Entities
-@model List<List<Location>>
+﻿@using CourseProjectSculptureWorks.Models.SalesmanModel
+@using CourseProjectSculptureWorks.Models.Entities
+@model List<ListDurationViewModel>
 
 @{ 
     ViewData["Title"] = "Экскурсии";
     var excursionType = (ExcursionType)ViewBag.ExcursionType;
 }
+
+
 @if (Model != null && Model.Count != 0)
 {
-<h1>Экскурсии для @ViewBag.NumberOfPeople человек по городу @Model.First().First().City</h1>
+<h1>Экскурсии для @ViewBag.NumberOfPeople человек по городу @ViewBag.City</h1>
 <h2>Тип экскурсий: @excursionType.NameOfType</h2>
 <h2>Выделенное время: @ViewBag.Time мин</h2>
 <hr />
@@ -15,21 +18,26 @@
 {
     var count = 1;
     <p><b>Местоположения: </b></p>
-    foreach (var location in list)
+    foreach (var location in list.Locations)
     {
         <p>@count. @location.LocationName</p>
         count++;
     }
-    decimal price = list.Select(l => l.PriceForPerson).Sum() * (int)ViewBag.NumberOfPeople * (int)(1 - excursionType.Discount / 100);
-    int duration = list.Select(l => l.DurationOfExcursion).Sum();
-    <p><b>Цена экскурсий: </b>@price UAN</p>
+
+    var discount = Convert.ToDecimal(excursionType.Discount);
+    decimal price = (1 - discount / 100) * list.Locations.Select(l => l.PriceForPerson).Sum() * (int)ViewBag.NumberOfPeople;
+    int duration = list.Locations.Select(l => l.DurationOfExcursion).Sum();
+    <p><b>Общая стоимость экскурсий: </b>@price.ToString().Substring(0, price.ToString().IndexOf(',') + 3) UAN</p>
+    <p><b>Общая длительность: </b>@(duration + list.Duration) мин</p>
     <p><b>Длительность экскурсий: </b>@duration мин</p>
-    <form method="post" asp-route-date="@DateTime.Now" asp-route-locations="@list.ToArray()"
-           asp-route-typeOfExcursions="@excursionType.ExcursionTypeId" asp-route-numberOfPeople="@ViewBag.NumberOfPeople">
-        <div style="display:none;">
-            <input type="date" name="" value="@DateTime.Now.Date" />
-            <input type="number" value="" />
-        </div>
+    <p><b>Длительность перемещений: </b>@list.Duration мин</p>
+    <form method="post" id="@((DateTime)ViewBag.Date)" asp-action="AddExcursions" asp-route-date="@((DateTime)ViewBag.Date)" asp-route-subjects="@ViewBag.Subjects"
+           asp-route-typeOfExcursions="@excursionType.ExcursionTypeId" asp-route-numberOfPeople="@ViewBag.NumberOfPeople">        
+            @foreach(var location in list.Locations)
+            {
+                <input type="hidden" name="locationsId" value="@location.LocationId" />
+            }
+        
         <input type="submit" class="btn btn-success" value="Добавить экскурсии" />
     </form>
     <hr />

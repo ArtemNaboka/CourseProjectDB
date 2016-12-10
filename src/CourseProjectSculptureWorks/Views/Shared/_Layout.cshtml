@@ -122,6 +122,8 @@
                 <div class="modal-body">
                     <form style="margin-left:27%;" method="get" class="form-horizontal" asp-controller="Automation" asp-action="CombinationsOfExcursions">
                         <h4 style="text-align:center;width:300px;">Выберите город, время для экскурсий, вид экскурсий и количество человек</h4>
+                        <input type="text" name="subjects" class="form-control" placeholder="Тематика" /><br />
+                        <input type="date" name="date" class="form-control" /><br />
                         <select class="form-control" name="city">
                             @foreach (var city in db.Locations.GroupBy(l => l.City))
                             {
