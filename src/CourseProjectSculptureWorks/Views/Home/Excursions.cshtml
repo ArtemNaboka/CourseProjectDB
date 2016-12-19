@@ -16,6 +16,7 @@
 @*<a asp-action="AddNewExcursion" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсию</a>*@
 <a style="margin-left:40px;" asp-action="AddNewExcursions" class="addBtn"><span class="glyphicon glyphicon-plus"></span>  Добавить экскурсии</a>
 <a style="margin-left:20px;" class="btn btn-success" asp-action="Excursions">Показать все</a>
+<a style="margin-left:20px;" id="addToExc" class="btn btn-success">Запись на экскурсии</a>
 <br />
 <div class="column features">
     <form asp-action="Excursions" method="get">
@@ -191,4 +192,52 @@ else if (ViewBag.SearchCriteria != null)
         $("option[criteria=" + criteria + "]").attr("selected", "true");
     </script>
 }
+
+
+
+<div id="addToExcBox" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Запись на экскурсии</h4>
+            </div>
+            <div class="modal-body">
+                <form style="margin-left:27%;" method="get" class="form-horizontal" asp-controller="Home" asp-action="AvailableExcursions">
+                    <h4 style="margin-right: 100px; text-align: center;">Выберите дату экскурсии, количество человек, местоположения</h4><br/>
+                    <input type="date" name="dateOfExcursion" class="form-control" /><br/>
+                    <input type="number" name="numberOfPeople" placeholder="Количество человек" class="form-control" /><br/>
+                    <span class="hider form-control" style="cursor:pointer;padding-top:5px;width:160px;">
+                        Местоположения
+                        <span style="width:3px; height:3px;" class="glyphicon glyphicon-chevron-down"></span>
+                    </span>
+                    <div id="hidden" style="display: none;">
+                        @foreach (var location in db.Locations)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="location" value="@location.LocationId">@location.LocationName (@location.Country, @location.City)
+                                </label>
+                            </div>
+                        }
+                    </div><br />
+                    <input style="width:100%;" class="btn btn-primary" type="submit" value="Дальше" />
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".hider").click(function(){
+            $("#hidden").slideToggle("slow");
+            return false;
+        });
+    });
+</script>
 

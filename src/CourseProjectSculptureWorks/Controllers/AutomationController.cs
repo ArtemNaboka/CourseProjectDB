@@ -90,6 +90,7 @@ namespace CourseProjectSculptureWorks.Controllers
             _db.Excursions.Add(excursion);
             _db.SaveChanges();
 
+            int count = 1;
             foreach (var location_id in locationsId)
             {
                 _db.Compositions.Add(new Composition
@@ -98,7 +99,8 @@ namespace CourseProjectSculptureWorks.Controllers
                     LocationId = location_id,
                     Excursion = excursion,
                     Location = _db.Locations
-                        .Single(l => l.LocationId == location_id)
+                        .Single(l => l.LocationId == location_id),
+                    SerialNumber = count++
                 });
             }
             _db.SaveChanges();

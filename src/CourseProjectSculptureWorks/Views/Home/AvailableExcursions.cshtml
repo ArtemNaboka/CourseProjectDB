@@ -1,0 +1,57 @@
+﻿@using CourseProjectSculptureWorks.Data
+@using CourseProjectSculptureWorks.Models.Entities
+@model List<Excursion>
+
+@inject ApplicationDbContext db
+
+@{
+    ViewData["Title"] = "Доступные экскурсии";
+
+}
+
+
+@if (Model != null && Model.Count != 0)
+{
+    <div class="panel panel-info" style="background-color: rgba(255, 255, 255, 0.6); margin-bottom: 0;">
+        <div class="panel-heading" style='text-align: center'>
+            <h3>Доступные экскурсии</h3>
+            <h3>Дата: @ViewBag.DateString</h3>
+            <h3>Количество человек для записи: @ViewBag.NumberOfPeople</h3>
+        </div>
+    </div>
+    <div style="background:#F5F5F5;padding-top:20px;">
+        @foreach (var excursion in Model)
+        {
+            <div style="margin: 0 0 30px 30px;">
+                <p><b>Номер экскурсии:</b> @excursion.ExcursionId</p>
+                <p><b>Количество людей:</b> @excursion.NumberOfPeople</p>
+                <p><b>Вид экскурсии:</b> @excursion.ExcursionType.NameOfType</p>
+                @{
+                    var duration = db.Locations
+                        .Where(l => db.Compositions.Where(c => c.ExcursionId == excursion.ExcursionId)
+                            .Select(c => c.LocationId)
+                            .Contains(l.LocationId))
+                        .Select(l => l.DurationOfExcursion)
+                        .Sum();
+                }
+                <p><b>Длительность экскурсии:</b> @duration мин</p>
+                <form method="post" asp-action="AddPeopleToExcursion"
+                      asp-route-excursionId="@excursion.ExcursionId"
+                      asp-route-numberOfPeople="@ViewBag.NumberOfPeople">
+
+                    <input type="submit" class="btn btn-success" value="Записать"/>
+                </form>
+                <hr/>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h3>Нету подходящих экскурсий...</h3>
+}
+
+
+
+
+

@@ -14,3 +14,11 @@ $("#aut").click(function () {
 $("#tran").click(function () {
     $("#myCityBox").modal('show');
 });
+
+$("#secondReport").click(function () {
+    $("#mySecondReportBox").modal('show');
+});
+
+$("#addToExc").click(function () {
+    $("#addToExcBox").modal('show');
+});

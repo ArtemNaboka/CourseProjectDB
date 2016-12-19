@@ -22,6 +22,11 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
+        public IActionResult AddSculptureNewForm()
+        {
+            return View();
+        }
+
 
         #region SculptureController
         [HttpGet]
@@ -33,7 +38,7 @@ namespace CourseProjectSculptureWorks.Controllers
                 .Include(s => s.Style)
                 .Include(s => s.Location)
                 .ToListAsync();
-            if (searchString != null && searchString != String.Empty)
+            if (!string.IsNullOrEmpty(searchString))
             {
                 List<Sculpture> sculpturesForSearch = await _db.Sculptures.ToListAsync();
                 if (searchCriteria == 0)
@@ -1056,7 +1061,7 @@ namespace CourseProjectSculptureWorks.Controllers
                                     .Include(e => e.ExcursionType)
                                     .Include(e => e.Compositions)
                                     .ToListAsync();
-            if (searchString != null && searchString != String.Empty)
+            if (!string.IsNullOrEmpty(searchString))
             {
                 var locations = await _db.Locations
                     .Where(l => l.LocationName == searchString)
@@ -1126,7 +1131,7 @@ namespace CourseProjectSculptureWorks.Controllers
                 excursionsForSearch = excursionsForSearch
                     .Where(e => e.DateOfExcursion == dateOfExcursion)
                     .ToList();
-                ViewBag.SearchString = String.Format("{2}-{1}-{0}",
+                ViewBag.SearchString = string.Format("{2}-{1}-{0}",
                     dateOfExcursion.Value.Day,
                     dateOfExcursion.Value.Month,
                     dateOfExcursion.Value.Year);
@@ -1346,12 +1351,14 @@ namespace CourseProjectSculptureWorks.Controllers
         {
             if(ModelState.IsValid)
             {
-                var locations = new List<Location>();
-                foreach(var location_id in location)
-                    locations.Add(_db.Locations
-                        .Single(l => l.LocationId == location_id));
+                var locations = location
+                    .Select(locationId => _db.Locations
+                        .Single(l => l.LocationId == locationId))
+                    .ToList();
+
                 var excursionType = _db.ExcursionTypes
                     .Single(e => e.ExcursionTypeId == model.ExcursionTypeId);
+
                 var excursion = new Excursion
                 {
                     Subjects = model.Subjects,
@@ -1469,6 +1476,97 @@ namespace CourseProjectSculptureWorks.Controllers
             return _db.Excursions != null && _db.Excursions.Count() != 0;
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> AvailableExcursions
+            (DateTime? dateOfExcursion, int[] locations, int numberOfPeople)
+        {
+            var availableExcs = await _db.Excursions
+                .Include(e => e.ExcursionType)
+                .Where(e => e.DateOfExcursion == dateOfExcursion.Value
+                && e.NumberOfPeople + numberOfPeople <= e.ExcursionType.MaxNumberOfPeople)
+                .ToListAsync();
+
+            Array.Sort(locations);
+
+            var particularExcursions = new List<Excursion>();
+
+            foreach (var excursion in availableExcs)
+            {
+                var locationsId = _db.Compositions
+                    .Where(c => c.ExcursionId == excursion.ExcursionId)
+                    .Select(c => c.LocationId)
+                    .ToArray();
+
+                Array.Sort(locationsId);
+
+                bool isEqual = true;
+                for (var i = 0; i < locations.Length && isEqual; i++)
+                {
+                    if (locations[0] != locationsId[0])
+                    {
+                        isEqual = false;
+                    }
+                }
+
+                if (isEqual)
+                {
+                    particularExcursions.Add(excursion);
+                }
+            }
+
+
+            ViewBag.DateString = string.Format("{0}.{1}.{2}", dateOfExcursion.Value.Day,
+                dateOfExcursion.Value.Month, dateOfExcursion.Value.Year);
+
+            ViewBag.Date = dateOfExcursion;
+
+            ViewBag.NumberOfPeople = numberOfPeople;
+
+            return View(particularExcursions);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddPeopleToExcursion(int? excursionId,
+            int? numberOfPeople)
+        {
+            if (excursionId == null || numberOfPeople == null)
+            {
+                return NotFound();
+            }
+
+            var excursion = _db.Excursions
+                .Include(e => e.ExcursionType)
+                .Single(e => e.ExcursionId == excursionId.Value);
+
+
+            if (excursion.NumberOfPeople + numberOfPeople.Value >
+                excursion.ExcursionType.MaxNumberOfPeople)
+            {
+                throw new Exception("Слишком много людей");
+            }
+
+
+            excursion.NumberOfPeople += numberOfPeople.Value;
+            excursion.PriceOfExcursion = excursion.NumberOfPeople
+                                                *_db.Locations
+                                                    .Where(l => _db.Compositions
+                                                        .Where(c => c.ExcursionId == excursionId.Value)
+                                                        .Select(c => c.LocationId)
+                                                        .Contains(l.LocationId))
+                                                    .Select(l => l.PriceForPerson)
+                                                    .Sum()
+                                                * (1 - excursion.ExcursionType.Discount/100);
+            
+
+            _db.Excursions.Update(excursion);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Excursions));
+        }
+
         #endregion
 
         #region ExcursionTypesController
@@ -1478,7 +1576,7 @@ namespace CourseProjectSculptureWorks.Controllers
         {
             var searchedTypesOfExcursions = await _db.ExcursionTypes
                                                     .ToListAsync();
-            if (searchString != null && searchString != String.Empty)
+            if (!string.IsNullOrEmpty(searchString))
             {
                 var typesForSearch = await _db.ExcursionTypes
                                                 .ToListAsync();

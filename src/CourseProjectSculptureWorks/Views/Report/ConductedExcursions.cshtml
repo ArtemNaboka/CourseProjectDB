@@ -1,0 +1,97 @@
+﻿@using CourseProjectSculptureWorks.Models.Entities
+@model List<Excursion>
+
+@{
+    ViewData["Title"] = "Отчет о проведеных экскурсиях";
+}
+
+
+
+@if (Model != null && Model.Count != 0)
+{
+    <table>
+        <tr><th colspan="5">Отчет о проведенных экскурсиях в @ViewData["Location"]</th></tr>
+        <tr>
+            <td>
+                <b>Номер экскурсии</b>
+            </td>
+            <td>
+                <b>Дата экскурсии</b>
+            </td>
+            <td>
+                <b>Вид экскурсии</b>
+            </td>
+            <td>
+                <b>Кол-во людей</b>
+            </td>
+            <td>
+                <b>Общая стоимость</b>
+            </td>
+        </tr>
+        @foreach (var reportLine in Model)
+        {
+            var date = reportLine.DateOfExcursion.Date.ToString()
+                .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            <tr>
+                <td>@reportLine.ExcursionId</td>
+                <td>@date[0]</td>
+                <td>@reportLine.ExcursionType.NameOfType</td>
+                <td>@reportLine.NumberOfPeople чел</td>
+                <td>@reportLine.PriceOfExcursion UAN</td>
+            </tr>
+        }
+        <tr>
+            <td><b>Итого</b></td>
+            <td colspan="5"><b>Общее кол-во проведенных экскурсий: @Model.Count</b></td>
+        </tr>
+    </table>
+    <br /><br />
+
+}
+else
+{
+    <h3>В базе данных отсутствует информация об экскурсиях...</h3>
+}
+
+<script>
+    onload = function()
+    {
+        window.print();
+    }
+</script>
+
+<style>
+    table {
+        width: 100%;
+        margin-top: 3%;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        text-align: center;
+        border-collapse: collapse;
+        border-spacing: 5px;
+        background: #E1E3E0;
+        border-radius: 20px;
+    }
+
+    th {
+        font-size: 22px;
+        font-weight: 300;
+        padding: 12px 10px;
+        border-bottom: 2px solid #F56433;
+        color: #F56433;
+    }
+
+    tbody tr:nth-child(2) {
+        border-bottom: 2px solid #F56433;
+    }
+
+    tbody tr:last-child {
+        border-top: 2px solid #F56433;
+        border-bottom: 2px solid #F56433;
+    }
+
+    td {
+        padding: 20px;
+        color: #8D8173;
+    }
+</style>
+

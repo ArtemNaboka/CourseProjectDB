@@ -1,4 +1,8 @@
-﻿a
+﻿body {
+    background-image: url("../images/bg.jpg");
+}
+
+a
 {
     cursor:pointer;
 }
@@ -23,7 +27,7 @@ a.addBtn:active { background: rgba(255, 69, 0,.2); }
 
 .features
 {
-    background: #ededed;
+    background: rgba(237, 237, 237, .6);
     margin: 20px -15px 20px 20px;
     box-shadow: 0 1px 2px #d1d1d1;
 }

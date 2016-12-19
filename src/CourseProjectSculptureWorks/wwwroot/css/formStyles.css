@@ -1,0 +1,81 @@
+﻿body {
+    background-image: url(../images/lion.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.form-container
+{
+    width:485px; /*450*/
+    height:auto;
+    margin-left:350px;
+    margin-top:20px;
+    background: rgba(0,0,0,0.8);
+    border-radius:40px;
+}
+
+form
+{
+    padding:30px;
+}
+
+h3
+{
+    font-family:Georgia; 
+    color:white;
+    text-align:center;
+    font-weight:600;
+    padding-bottom:30px;
+}
+
+label
+{
+    font-family:Georgia; 
+    color:white;
+
+}
+
+input[type=range]
+{
+    width: 200px;
+}
+
+button
+{
+    width:100%;
+}
+
+input[type=text]
+{
+    width:100%;
+    margin-left:40px;
+}
+
+input[type=number], input[type=email]
+{
+    width:100%;
+    margin-left:40px;
+}
+
+select
+{
+    width:100%;
+    margin-left:40px;
+}
+
+label
+{
+    width:100%;
+    margin-left:40px;
+    font-family:Georgia; 
+    color:red;
+}
+
+#result, #result1, #result2
+{
+    font-family:Georgia; 
+    color:white;
+    font-size:16px;
+    margin-left:40px;
+}
+

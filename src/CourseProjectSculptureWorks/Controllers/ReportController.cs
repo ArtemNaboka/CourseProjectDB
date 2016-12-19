@@ -73,11 +73,32 @@ namespace CourseProjectSculptureWorks.Controllers
             ViewData["NumberOfExcursions"] = _db.Excursions.Count();
             return View(resultList);
         }
+        
 
-
-        public void CreateDoc()
+        [HttpGet]
+        public IActionResult ConductedExcursions(int? locationId)
         {
-            Assembly asm = Assembly.Load(new AssemblyName(@"C: \Users\ПК\Documents\Visual Studio 2015\Projects\ConsoleApplication6\ConsoleApplication6\bin\Debug\ConsoleApplication6.exe"));
+            if (locationId == null)
+                return NotFound();
+
+            var location = _db.Locations.Single(l => l.LocationId == locationId);
+
+            var excursionsId = _db.Compositions
+                                        .Include(c => c.Excursion)
+                                        .ThenInclude(e => e.ExcursionType)
+                                        .Include(c => c.Location)
+                                        .Where(c => c.LocationId == locationId)
+                                        .Select(c => c.ExcursionId)
+                                        .ToList();
+
+            var excursions = _db.Excursions
+                .Include(e => e.ExcursionType)
+                .Where(e => excursionsId.Contains(e.ExcursionId))
+                .OrderBy(e => e.DateOfExcursion)
+                .ToList();
+
+            ViewData["Location"] = location.LocationName;
+            return View(excursions);
         }
     }
 }

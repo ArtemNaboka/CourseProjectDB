@@ -113,15 +113,15 @@
                     <tr id="@sculpture.Id">
                         <td>@sculpture.Name</td>
                         <td>@sculpture.Type</td>
-                        <td><a style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
-                        <td><a style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
-                        <td><a style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
+                        <td><a target="_blank" style="text-decoration:none;" asp-action="Sculptors" asp-route-searchCriteria="1" asp-route-searchString="@sculpture.Sculptor.Name">@sculpture.Sculptor.Name</a></td>
+                        <td><a target="_blank" style="text-decoration:none;" asp-action="Styles" asp-route-searchString="@sculpture.Style.StyleName">@sculpture.Style.StyleName</a></td>
+                        <td><a target="_blank" style="text-decoration:none;" asp-action="Locations" asp-route-searchString="@sculpture.Location.LocationName">@sculpture.Location.LocationName</a></td>
                         <td>@sculpture.Material</td>
                         <td>@sculpture.Year год</td>
                         <td>@sculpture.Square м<sup>2</sup></td>
                         <td>@sculpture.Height м</td>
                         <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td><a title="Удалить" style="color:rgb(220, 20, 60);" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                 }
             }

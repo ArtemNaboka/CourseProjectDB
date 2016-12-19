@@ -53,6 +53,8 @@
                         <ul class="dropdown-menu">
                             <li><a href="#" id="firstStat">Количество скульптур за определенное время</a></li>
                             <li><a asp-controller="Statistics" asp-action="StylesPopularity">Популярность стилей скульптуры</a></li>
+                            <li><a asp-controller="Statistics" asp-action="AttendanceOfLocations">Посещаемость экскурсий по городам</a></li>
+                            <li><a asp-controller="Statistics" asp-action="CountryStatistics">Культурное наследство стран</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -60,6 +62,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#" id="firstReport">Отчет по работам скульптора</a></li>
                             <li><a asp-controller="Report" asp-action="ConductedExcursionsReport">Отчет по проведенным экскурсиям</a></li>
+                            <li><a href="#" id="secondReport">Отчет по проведенным экскурсиям по местоположению</a></li>
                         </ul>
                     </li>
                     <li><a href="#" id="aut">Планирование экскурсий</a></li>
@@ -176,11 +179,39 @@
         </div>
     </div>
 
+
+    <div id="mySecondReportBox" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Отчет о проведенных экскурсиях по местоположению</h4>
+                </div>
+                <div class="modal-body">
+                    <form style="margin-left:27%;" method="get" class="form-horizontal" asp-controller="Report" asp-action="ConductedExcursions">
+                        <h4 style="margin-left:7%;">Выберите местоположение</h4>
+                        
+                        <select name="locationId" class="form-control">
+                            @foreach(var location in db.Locations)
+                            {
+                                <option value="@location.LocationId">@location.LocationName</option>
+                            }
+                        </select>
+                        <br />
+                        <input type="submit" style="width:100%;" class="btn btn-primary" value="Получить отчет" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
-        <hr />
+        
         <footer>
-            <p>&copy; 2016 - Учет произведений скульптуры</p>
+            
         </footer>
     </div>
 
