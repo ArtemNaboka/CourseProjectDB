@@ -5,15 +5,16 @@
 @inject ApplicationDbContext db
 
 @{
-    ViewData["Title"] = "Добавление новой скульптуры";
+    ViewData["Title"] = "Редактирование скульптуры";
 }
 
 <link rel="stylesheet" href="../css/formStyles.css" />
 
 <div class="form-container">
-    <form method="post" class="form-horizontal" asp-action="AddSculptureNewForm">
-        <h3 style="width: 380px;">Добавление новой скульптуры</h3>
+    <form method="post" class="form-horizontal" asp-action="EditSculptureNewForm">
+        <h3 style="width: 380px;">Редактирование скульптуры</h3>
         <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" value="@Model.SculptureId" asp-for="SculptureId" />
         <div class="form-group">
             <label style="color:white;margin-left:55px;">Название:</label>
             <div class="col-md-10">
@@ -105,11 +106,11 @@
             </div>
         </div>
         <div>
-            <button type="submit" class="btn btn-success check">Добавить</button>
+            <button type="submit" class="btn btn-success check">Редактировать</button>
         </div>
-        <br/>
+        <br />
         <a asp-action="Sculptures" style="margin-left: 40%; font-size: 16px;"><span class="glyphicon glyphicon-arrow-left" /> Назад</a>
 
     </form>
-    
+
 </div>

@@ -20,7 +20,7 @@
     <a data-href="#1" class="btn btn-primary" id="step_back"> < </a>
     <a data-href="#1" class="btn btn-primary" id="step_forward"> > </a>
 </div>
-<a asp-action="AddNewSculpture" class="addBtn"><span class="glyphicon glyphicon-plus"></span>   Добавить скульптуру</a>
+<a asp-action="AddSculptureNewForm" class="addBtn"><span class="glyphicon glyphicon-plus"></span>   Добавить скульптуру</a>
 <a asp-action="Sculptures" class="btn btn-success">Показать все</a>
 <div class="features">
     <form asp-action="Sculptures" method="get">
@@ -103,7 +103,7 @@
                         <td count="@count" style="background:#98FB98;">@sculpture.Year год</td>
                         <td count="@count" style="background:#98FB98;">@sculpture.Square м<sup>2</sup></td>
                         <td count="@count" style="background:#98FB98;">@sculpture.Height м</td>
-                        <td count="@count" style="background:#98FB98;"><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td count="@count" style="background:#98FB98;"><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculptureNewForm" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td count="@count" style="background:#98FB98;"><a title="Удалить" style="color:crimson;" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                     count++;
@@ -120,7 +120,7 @@
                         <td>@sculpture.Year год</td>
                         <td>@sculpture.Square м<sup>2</sup></td>
                         <td>@sculpture.Height м</td>
-                        <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculpture" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                        <td><a title="Редактировать" style="color:cornflowerblue;" asp-action="EditSculptureNewForm" asp-route-sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td><a title="Удалить" style="color:rgb(220, 20, 60);" class="del" sculptureId="@sculpture.Id"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                 }

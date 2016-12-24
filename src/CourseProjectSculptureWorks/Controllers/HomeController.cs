@@ -22,11 +22,144 @@ namespace CourseProjectSculptureWorks.Controllers
             _db = db;
         }
 
+
+        [HttpGet]
         public IActionResult AddSculptureNewForm()
         {
             return View();
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> AddSculptureNewForm(NewSculptureViewModel model)
+        {
+            if (_db.Sculptors.SingleOrDefault(s => s.Name == model.SculptorName) == null)
+            {
+                ModelState.AddModelError("Sculptor not found",
+                    "Данный скульптор отсутствует в базе данных");
+            }
+
+            if (_db.Styles.SingleOrDefault(s => s.StyleName == model.StyleName) == null)
+            {
+                ModelState.AddModelError("Style not found",
+                    "Данный стиль отсутствует в базе данных");
+            }
+
+            if (_db.Locations.SingleOrDefault(s => s.LocationName == model.LocationName) == null)
+            {
+                ModelState.AddModelError("Location not found",
+                    "Данное местоположение отсутствует в базе данных");
+            }
+
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+
+            var sculpture = new Sculpture
+            {
+                Name = model.Name,
+                Type = model.Type,
+                Material = model.Material,
+                Year = model.Year,
+                Square = model.Square,
+                Height = model.Height,
+
+                Style = await _db.Styles
+                        .SingleAsync(s => s.StyleName == model.StyleName),
+
+                Sculptor = await _db.Sculptors
+                        .SingleAsync(s => s.Name == model.SculptorName),
+
+                Location = await _db.Locations
+                        .SingleAsync(l => l.LocationName == model.LocationName)
+            };
+
+            _db.Sculptures.Add(sculpture);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Sculptures));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditSculptureNewForm(int? sculptureId)
+        {
+            if (sculptureId == null)
+                return NotFound();
+
+
+            var sculpture = await _db.Sculptures
+                .Include(s => s.Sculptor)
+                .Include(s => s.Style)
+                .Include(s => s.Location)
+                .SingleAsync(s => s.Id == sculptureId.Value);
+
+
+            var sculptureViewModel = new NewSculptureViewModel()
+            {
+                SculptureId = sculpture.Id,
+                Name = sculpture.Name,
+                Type = sculpture.Type,
+                Material = sculpture.Material,
+                Year = sculpture.Year,
+                Square = sculpture.Square,
+                Height = sculpture.Height,
+                StyleName = sculpture.Style.StyleName,
+                SculptorName = sculpture.Sculptor.Name,
+                LocationName = sculpture.Location.LocationName
+            };
+
+
+            return View(sculptureViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditSculptureNewForm(NewSculptureViewModel model)
+        {
+            if (_db.Sculptors.SingleOrDefault(s => s.Name == model.SculptorName) == null)
+            {
+                ModelState.AddModelError("Sculptor not found",
+                    "Данный скульптор отсутствует в базе данных");
+            }
+
+            if (_db.Styles.SingleOrDefault(s => s.StyleName == model.StyleName) == null)
+            {
+                ModelState.AddModelError("Style not found",
+                    "Данный стиль отсутствует в базе данных");
+            }
+
+            if (_db.Locations.SingleOrDefault(s => s.LocationName == model.LocationName) == null)
+            {
+                ModelState.AddModelError("Location not found",
+                    "Данное местоположение отсутствует в базе данных");
+            }
+
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var sculpture = new Sculpture
+            {
+                Id = model.SculptureId,
+                Name = model.Name,
+                Type = model.Type,
+                Material = model.Material,
+                Year = model.Year,
+                Square = model.Square,
+                Height = model.Height,
+                Style = await _db.Styles
+                        .SingleAsync(s => s.StyleName == model.StyleName),
+                Sculptor = await _db.Sculptors
+                        .SingleAsync(s => s.Name == model.SculptorName),
+                Location = await _db.Locations
+                        .SingleAsync(l => l.LocationName == model.LocationName)
+            };
+
+            _db.Sculptures.Update(sculpture);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Sculptures));
+        }
 
         #region SculptureController
         [HttpGet]
@@ -101,33 +234,6 @@ namespace CourseProjectSculptureWorks.Controllers
                         .Where(s => s.Height.ToString().Trim().ToLower()
                         .Contains(searchString.Trim().ToLower()))
                         .ToList();
-                //if (searchCriteria == 0)
-                //{
-                //    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())
-                //        || s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //}
-                //else if (searchCriteria == 1)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 2)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Sculptor.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 3)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Style.StyleName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 4)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Location.LocationName.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 5)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Material.Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 6)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Year.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 7)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Square.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
-                //else if (searchCriteria == 8)
-                //    searchedSculptures = searchedSculptures.Where(s => s.Height.ToString().Trim().ToLower().Contains(searchString.Trim().ToLower())).ToList();
                 ViewBag.SearchString = searchString;
                 ViewBag.SearchCriteria = searchCriteria;
                 ViewBag.SculpturesId = sculpturesForSearch
