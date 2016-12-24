@@ -1,106 +1,111 @@
-﻿@using CourseProjectSculptureWorks.Models.ViewModels
-@using CourseProjectSculptureWorks.Data
+﻿@using CourseProjectSculptureWorks.Data
+@using CourseProjectSculptureWorks.Models.ViewModels
 @model SculptureViewModel
 
 @inject ApplicationDbContext db
 
 @{
-    ViewData["Title"] = "Добавить скульптуры";
+    ViewData["Title"] = "Добавление новой скульптуры";
 }
 
-<form asp-controller="Home" asp-action="AddNewSculpture" method="post" class="form-horizontal">
-    <h4>Добавление скульптуры</h4>
-    <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+<link rel="stylesheet" href="../css/formStyles.css" />
+
+<div class="form-container">
+    <form method="post" class="form-horizontal" asp-action="AddNewSculpture">
+        <h3 style="width: 380px;">Добавление новой скульптуры</h3>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Название:</label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" placeholder="Введите название скульптуры..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Type" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <select asp-for="Type" class="form-control">
-                @foreach(var type in Lists.SculptureTypes)
-                {
-                    <option>@type</option>
-                }
-            </select>
-            <span asp-validation-for="Type" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Вид:</label>
+            <div class="col-md-10">
+                <select asp-for="Type" class="form-control">
+                    @foreach (var type in Lists.SculptureTypes)
+                    {
+                        <option>@type</option>
+                    }
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="SculptorId" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <select style="display:inline-table;" asp-for="SculptorId" class="form-control">
-                @foreach(var sculptor in db.Sculptors.ToList())
-                {
-                    <option value="@sculptor.SculptorId">@sculptor.Name</option>
-                }
-            </select>
-            <a asp-action="AddNewSculptor" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить скульптора" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
-            <span asp-validation-for="SculptorId" class="text-danger"></span>
+
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Скульптор:</label>
+            <div class="col-md-10">
+                <select style="display: inline-table;" asp-for="SculptorId" class="form-control">
+                    @foreach (var sculptor in db.Sculptors.ToList())
+                    {
+                        <option value="@sculptor.SculptorId">@sculptor.Name</option>
+                    }
+                </select>
+                <a asp-action="AddNewSculptor" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить скульптора" class="glyphicon glyphicon-plus" style="color: green; display: inline-table; margin-left: 10px;"></a>
+                <span asp-validation-for="SculptorId" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="StyleId" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <select style="display:inline-table;" asp-for="StyleId" class="form-control">
-                @foreach (var style in db.Styles.ToList())
-                {
-                    <option value="@style.StyleId">@style.StyleName</option>
-                }
-            </select>
-            <a asp-action="CreateNewStyle" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить стиль" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
-            <span asp-validation-for="StyleId" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Стиль:</label>
+            <div class="col-md-10">
+                <select style="display:inline-table;" asp-for="StyleId" class="form-control">
+                    @foreach (var style in db.Styles.ToList())
+                    {
+                        <option value="@style.StyleId">@style.StyleName</option>
+                    }
+                </select>
+                <a asp-action="CreateNewStyle" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить стиль" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
+                <span asp-validation-for="StyleId" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="LocationId" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <select style="display:inline-table;" asp-for="LocationId" class="form-control">
-                @foreach (var location in db.Locations.ToList())
-                {
-                    <option value="@location.LocationId">@location.LocationName</option>
-                }
-            </select>
-            <a asp-action="AddNewLocation" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить новое местоположение" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
-            <span asp-validation-for="LocationId" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Местоположение:</label>
+            <div class="col-md-10">
+                <select style="display:inline-table;" asp-for="LocationId" class="form-control">
+                    @foreach (var location in db.Locations.ToList())
+                    {
+                        <option value="@location.LocationId">@location.LocationName</option>
+                    }
+                </select>
+                <a asp-action="AddNewLocation" asp-route-backAction="AddNewSculpture" target="_blank" title="Добавить новое местоположение" class="glyphicon glyphicon-plus" style="color:green;display:inline-table;margin-left:10px;"></a>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Material" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Material" class="form-control" />
-            <span asp-validation-for="Material" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Материал:</label>
+            <div class="col-md-10">
+                <input asp-for="Material" class="form-control" placeholder="Введите материал скульптуры..." />
+                <span asp-validation-for="Material" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Year" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Year" class="form-control" />
-            <span asp-validation-for="Year" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Год создания:</label>
+            <div class="col-md-10">
+                <input asp-for="Year" class="form-control" placeholder="Введите год создания..." />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">Площадь (м<sup>2</sup>)</label>
-        <div class="col-md-10">
-            <input asp-for="Square" class="form-control" />
-            <span asp-validation-for="Square" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Площадь (м<sup>2</sup>)</label>
+            <div class="col-md-10">
+                <input asp-for="Square" class="form-control" placeholder="Введите площадь скульптуры..." />
+                <span asp-validation-for="Square" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">Высота (м)</label>
-        <div class="col-md-10">
-            <input asp-for="Height" class="form-control" />
-            <span asp-validation-for="Height" class="text-danger"></span>
+        <div class="form-group">
+            <label style="color:white;margin-left:55px;">Высота (м)</label>
+            <div class="col-md-10">
+                <input asp-for="Height" class="form-control" placeholder="Введите высоту скульптуры..." />
+                <span asp-validation-for="Height" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Добавить</button>
+        <div>
+            <button type="submit" class="btn btn-success check">Добавить</button>
         </div>
-    </div>
-</form>
+        <br />
+        <a asp-action="Sculptures" style="margin-left: 40%; font-size: 16px;"><span class="glyphicon glyphicon-arrow-left" /> Назад</a>
+
+    </form>
+
+</div>
